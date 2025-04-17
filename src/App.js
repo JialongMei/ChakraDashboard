@@ -8,6 +8,17 @@ import Dashboard from './pages/Dashboard';
 import Users from './pages/Users';
 import PrivateRoute from './components/PrivateRoute';
 import PublicRoute from './components/PublicRoute';
+import { ChakraProvider } from '@chakra-ui/react';
+import ReactDOM from "react-dom/client";
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+    <React.StrictMode>
+        <ChakraProvider>
+            <App />
+        </ChakraProvider>
+    </React.StrictMode>
+);
 
 function App() {
     return (
