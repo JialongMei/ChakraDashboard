@@ -1,25 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import Navigation from './components/Navigation';
+import { LogIn } from './pages/LogIn';
+import SignUp from './pages/SignUp';
+import Dashboard from './pages/Dashboard';
+import Users from './pages/Users';
+import PrivateRoute from './components/PrivateRoute';
+import PublicRoute from './components/PublicRoute';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <AuthProvider>
+            <HashRouter>
+                <div>
+                    <Navigation />
+                    <Routes>
+
+                        <Route element={<PublicRoute />}>
+                            <Route path="/login" element={<LogIn />} />
+                            <Route path="/signup" element={<SignUp />} />
+                        </Route>
+
+
+                        <Route element={<PrivateRoute />}>
+                            <Route path="/dashboard" element={<Dashboard />} />
+                            <Route path="/users" element={<Users />} />
+                        </Route>
+
+
+                        <Route path="/" element={<Navigate to="/login" replace />} />
+                        <Route path="*" element={<Navigate to="/login" replace />} />
+                    </Routes>
+                </div>
+            </HashRouter>
+        </AuthProvider>
+    );
 }
 
 export default App;
