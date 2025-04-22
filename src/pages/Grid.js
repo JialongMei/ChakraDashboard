@@ -1,4 +1,4 @@
-import LogoutBotton from "../components/LogoutBotton";
+import Logoutbutton from "../components/LogoutButton";
 import {Avatar, Box, Button, Flex, Grid, GridItem, HStack, Icon, Image, Input, Spacer, VStack} from "@chakra-ui/react";
 import { Text } from "@chakra-ui/react";
 import { ReactComponent as HomeIconSvg } from "../icon/home-2.svg";
@@ -13,19 +13,7 @@ import { ReactComponent as  Profile_example } from "../image/Group 35556.svg"
 import Image1 from "../image/img_1.png";
 import { ReactComponent as  Logout_icon } from "../icon/logout.svg";
 import {useLocation, useNavigate} from 'react-router-dom';
-import {InputGroup, InputRightElement, SearchIcon, SimpleGrid} from "@chakra-ui/icons";
-import {
-    Area,
-    AreaChart,
-    Bar,
-    BarChart,
-    CartesianGrid,
-    Legend,
-    ResponsiveContainer,
-    Tooltip,
-    XAxis,
-    YAxis
-} from "recharts";
+import {InputGroup, InputElement, SimpleGrid} from "@chakra-ui/react";
 
 // make wrapper for navigation and header
 // migrate to v3
@@ -33,7 +21,7 @@ import {
 // navigation bar for mobile
 // change icons into the chakraV3 way
 // consistent fonts. heights. widths acccross the board
-// make button hover slightly darker/lighter for all (depends on the curr background)
+// make button hover slightly darker/lighter for all (depends on the curr )
 
 
 const MobileNav = () => {
@@ -110,7 +98,7 @@ const MenuItem = ({ icon, text, isActive, to, notifications}) => {
 const SideBox = () => {
     return (
         <Box
-            background="#ffffff"
+            bg="#ffffff"
             width="205px"
             height="100%"
             boxShadow="sm"
@@ -194,7 +182,7 @@ const SideBox = () => {
                 <GridItem gap="290px">
                     <Flex ml={4} gap={2}>
                         <Logout_icon/>
-                        <LogoutBotton/>
+                        <Logoutbutton/>
                     </Flex>
                 </GridItem>
             </Grid>
@@ -247,15 +235,17 @@ const MainContent = ({ children, to }) => {
                                     borderRadius="md"
                                     bg="white"
                                     size="sm"
+                                    rightElement={
+                                        <InputElement placement="right">
+                                            <Icon
+                                                as={Search_normal}
+                                                opacity="50%"
+                                                color="gray.400"
+                                                boxSize="20px"
+                                            />
+                                        </InputElement>
+                                    }
                                 />
-                                <InputRightElement>
-                                    <Icon
-                                        as={Search_normal}
-                                        opacity="50%"
-                                        color="gray.400"
-                                        boxSize="20px"
-                                    />
-                                </InputRightElement>
                             </InputGroup>
                             <Box display={{ base: "none", md: "block" }}>
                                 <Profile_example/>

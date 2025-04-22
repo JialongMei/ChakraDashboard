@@ -1,5 +1,5 @@
-import LogoutBotton from "../components/LogoutBotton";
-import {Avatar, Box, Button, Flex, Grid, GridItem, HStack, Icon, Image, Input, Spacer, VStack} from "@chakra-ui/react";
+import Logoutbutton from "../components/LogoutButton";
+import {Avatar, Box, Button, Flex, Grid, GridItem, HStack, Image, Input, Spacer, VStack} from "@chakra-ui/react";
 import { Text } from "@chakra-ui/react";
 import { ReactComponent as HomeIconSvg } from "../icon/home-2.svg";
 import { ReactComponent as Quote} from "../icon/quote-down-square.svg"
@@ -18,7 +18,8 @@ import { ReactComponent as  Message_notif } from "../icon/message-notif.svg"
 import profileImage from "../image/img.png";
 import { ReactComponent as  Logout_icon } from "../icon/logout.svg";
 import { useNavigate } from 'react-router-dom';
-import {InputGroup, InputRightElement, SearchIcon, SimpleGrid} from "@chakra-ui/icons";
+import {InputGroup, InputElement, SimpleGrid} from "@chakra-ui/react";
+import { Icon, createIcon } from "@chakra-ui/react";
 import {
     Area,
     AreaChart,
@@ -32,6 +33,30 @@ import {
     YAxis
 } from "recharts";
 
+const SearchIcon = createIcon({
+    displayName: "SearchIcon",
+    viewBox: "0 0 24 24",
+    path: (
+        <g opacity="0.5">
+            <path
+                d="M11 20C15.9706 20 20 15.9706 20 11C20 6.02944 15.9706 2 11 2C6.02944 2 2 6.02944 2 11C2 15.9706 6.02944 20 11 20Z"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                fill="none"
+            />
+            <path
+                d="M18.9299 20.6898C19.4599 22.2898 20.6699 22.4498 21.5999 21.0498C22.4499 19.7698 21.8899 18.7198 20.3499 18.7198C19.2099 18.7098 18.5699 19.5998 18.9299 20.6898Z"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                fill="none"
+            />
+        </g>
+    ),
+});
 
 const MobileNav = () => {
     return (
@@ -105,7 +130,7 @@ const MenuItem = ({ icon, text, isActive, to, notifications}) => {
 const SideBox = () => {
     return (
         <Box
-            background="#ffffff"
+            bg="#ffffff"
             width="225px"
             height="100%"
             boxShadow="sm"
@@ -195,7 +220,7 @@ const SideBox = () => {
                 <GridItem gap="290px">
                     <Flex ml={4} gap={2}>
                         <Logout_icon/>
-                        <LogoutBotton/>
+                        <Logoutbutton/>
                     </Flex>
                 </GridItem>
             </Grid>
@@ -226,7 +251,7 @@ const MainContent = ({ children }) => {
                         flexDirection={{ base: "column", lg: "row" }}
                         gap={{ base: 4, lg: 0 }}
                     >
-                        <Text fontSize="2xl" fontWeight="bold">Dashboard</Text>
+                        <Text fontSize="2xl" fontWeight="bold" color="black">Dashboard</Text>
 
                         <Flex
                             align="center"
@@ -234,20 +259,34 @@ const MainContent = ({ children }) => {
                             flexDirection={{ base: "column", md: "row" }}
                             gap={4}
                         >
-                            <InputGroup w={{ base: "100%", md: "300px", lg: "550px" }}>
-                                <Input
-                                    placeholder="Search"
-                                    borderRadius="md"
-                                    bg="white"
-                                />
-                                <InputRightElement>
-                                    <Icon
-                                        as={Search_normal}
-                                        opacity="50%"
-                                        color="gray.400"
-                                        boxSize="24px"
+                            <InputGroup w={{ base: "100%", md: "250px", lg: "400px" }}>
+                                <Box position="relative" width="100%">
+                                    <Input
+                                        placeholder="Search"
+                                        borderRadius="md"
+                                        bg="white"
+                                        size="sm"
+                                        color="black"
+                                        paddingRight="40px"
+                                        outline="none"
+                                        border="none"
                                     />
-                                </InputRightElement>
+                                    <Box
+                                        position="absolute"
+                                        right="12px"
+                                        top="50%"
+                                        transform="translateY(-50%)"
+                                        pointerEvents="none"
+                                    >
+                                        <Icon
+                                            as={SearchIcon}
+                                            color="red.100"
+                                            boxSize="24px"
+                                            opacity="0.5"
+                                            mb={0.5}
+                                        />
+                                    </Box>
+                                </Box>
                             </InputGroup>
                             <Box display={{ base: "none", md: "block" }}>
                                 <Profile_example/>
@@ -266,17 +305,17 @@ const MainContent = ({ children }) => {
                         flexDirection={{ base: "column", md: "row" }}
                         gap={4}
                     >
-                        <Text fontWeight="medium">Wed, Oct 27</Text>
+                        <Text fontWeight="medium" color="black">Wed, Oct 27</Text>
 
                         <Flex
                             align="center"
                             flexWrap="wrap"
                             gap={2}
                         >
-                            <Text fontSize="sm" mr={2}>Choose Platform:</Text>
-                            <Button size="sm" variant="outline" mr={2}>Alibaba</Button>
-                            <Button size="sm" variant="outline" mr={2}>AliExpress</Button>
-                            <Button size="sm" colorScheme="purple">All</Button>
+                            <Text fontSize="sm" mr={2} color="black" opacity={0.6}>Choose Platform:</Text>
+                            <Button size="sm" mr={2} color="black" _hover={{ bg: "gray.100" }}>Alibaba</Button>
+                            <Button size="sm" mr={2} color="black" _hover={{ bg: "gray.100" }}>AliExpress</Button>
+                            <Button size="sm" bg="purple.500" color="white" _hover={{ bg: "purple" }}>All</Button>
                         </Flex>
                     </Flex>
                 </GridItem>

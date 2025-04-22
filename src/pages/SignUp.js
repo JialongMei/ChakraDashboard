@@ -1,17 +1,20 @@
 import {useEffect, useState} from "react";
 import {useAuth} from "../context/AuthContext";
 import {
-    Alert,
-    AlertIcon,
-    Box, Button,
+    Box,
+    Button,
     Container,
     Flex,
-    FormControl,
-    FormLabel,
+    Field,
+    FieldLabel,
     Heading,
-    Input, Link,
+    Input,
     Text,
-    VStack
+    VStack,
+    Alert,
+    AlertIndicator,
+    Link,
+    Image
 } from "@chakra-ui/react";
 
 export default function SignUp() {
@@ -78,16 +81,16 @@ export default function SignUp() {
 
                     {error && (
                         <Alert status="error" mb={4} borderRadius="md">
-                            <AlertIcon />
+                            <AlertIndicator />
                             {error}
                         </Alert>
                     )}
 
                     <VStack spacing={4} align="stretch">
-                        <FormControl>
-                            <FormLabel fontSize="sm" fontWeight="medium" color="gray.700">
+                        <Field>
+                            <FieldLabel fontSize="sm" fontWeight="medium" color="gray.700">
                                 Email
-                            </FormLabel>
+                            </FieldLabel>
                             <Input
                                 type="email"
                                 placeholder="your@email.com"
@@ -97,12 +100,12 @@ export default function SignUp() {
                                 borderRadius="md"
                                 focusBorderColor="#6F6CF3"
                             />
-                        </FormControl>
+                        </Field>
 
-                        <FormControl>
-                            <FormLabel fontSize="sm" fontWeight="medium" color="gray.700">
+                        <Field>
+                            <FieldLabel fontSize="sm" fontWeight="medium" color="gray.700">
                                 Password
-                            </FormLabel>
+                            </FieldLabel>
                             <Input
                                 type="password"
                                 placeholder="••••••••"
@@ -112,7 +115,7 @@ export default function SignUp() {
                                 borderRadius="md"
                                 focusBorderColor="#6F6CF3"
                             />
-                        </FormControl>
+                        </Field>
 
                         <Button
                             bg="#6F6CF3"
