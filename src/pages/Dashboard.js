@@ -16,6 +16,7 @@ import { ReactComponent as  Number_of_Takedowns } from "../image/Frame 35384.svg
 import { ReactComponent as  Coin } from "../icon/coin.svg"
 import { ReactComponent as  Message_notif } from "../icon/message-notif.svg"
 import profileImage from "../image/img.png";
+import { ReactComponent as  Logout_icon } from "../icon/logout.svg";
 import { useNavigate } from 'react-router-dom';
 import {InputGroup, InputRightElement, SearchIcon, SimpleGrid} from "@chakra-ui/icons";
 import {
@@ -48,7 +49,7 @@ const MobileNav = () => {
     );
 };
 
-const MenuItem = ({ icon, text, isActive, to}) => {
+const MenuItem = ({ icon, text, isActive, to, notifications}) => {
     const navigate = useNavigate();
 
     const handleClick = () => {
@@ -59,7 +60,7 @@ const MenuItem = ({ icon, text, isActive, to}) => {
 
     return (
         <Grid
-            templateColumns="24px minmax(0, 1fr)"
+            templateColumns="24px minmax(0, 1fr) auto"
             width="100%"
             height="48px"
             borderRadius="12px"
@@ -90,6 +91,13 @@ const MenuItem = ({ icon, text, isActive, to}) => {
                     {text}
                 </Text>
             </GridItem>
+            {notifications !== 0 && (
+                <GridItem>
+                    <Box width="16px" height="16px" bg="red" borderRadius="50%" display="flex" justifyContent="center" alignItems="center">
+                        <Text color="white"> {notifications} </Text>
+                    </Box>
+                </GridItem>
+            )}
         </Grid>
     );
 };
@@ -127,6 +135,7 @@ const SideBox = () => {
                         <GridItem>
                             <MenuItem
                                 icon={HomeIconSvg}
+                                notifications={0}
                                 text="Dashboard"
                                 isActive={true}
                                 to = "/dashboard"
@@ -135,14 +144,16 @@ const SideBox = () => {
                         <GridItem>
                             <MenuItem
                                 icon={Quote}
+                                notifications={0}
                                 text="Reviews"
                                 isActive={false}
-                                to = "/dashboard/reviews/Grid"
+                                to = "/dashboard/reviews/grid"
                             />
                         </GridItem>
                         <GridItem>
                             <MenuItem
                                 icon={Hashtag}
+                                notifications={0}
                                 text="Keywords"
                                 isActive={false}
                             />
@@ -150,6 +161,7 @@ const SideBox = () => {
                         <GridItem>
                             <MenuItem
                                 icon={Command_square}
+                                notifications={0}
                                 text="Web crawler"
                                 isActive={false}
                             />
@@ -157,6 +169,7 @@ const SideBox = () => {
                         <GridItem>
                             <MenuItem
                                 icon={Notification_bing}
+                                notifications={3}
                                 text="Notifications"
                                 isActive={false}
                             />
@@ -164,6 +177,7 @@ const SideBox = () => {
                         <GridItem>
                             <MenuItem
                                 icon={Setting}
+                                notifications={0}
                                 text="Settings"
                                 isActive={false}
                             />
@@ -171,11 +185,18 @@ const SideBox = () => {
                         <GridItem>
                             <MenuItem
                                 icon={User}
+                                notifications={0}
                                 text="User management"
                                 isActive={false}
                             />
                         </GridItem>
                     </Grid>
+                </GridItem>
+                <GridItem gap="290px">
+                    <Flex ml={4} gap={2}>
+                        <Logout_icon/>
+                        <LogoutBotton/>
+                    </Flex>
                 </GridItem>
             </Grid>
         </Box>
@@ -752,61 +773,124 @@ const MainContent = ({ children }) => {
                             <Box bg="white" height="auto">
                                 <Box
                                     bg="white"
-                                    p={6}
+                                    p={{ base: 3, sm: 4, md: 6 }}
                                     borderRadius="lg"
                                     boxShadow="sm"
                                     height="auto"
-                                    minHeight="170px"
+                                    minHeight={{ base: "auto", md: "170px" }}
                                 >
-                                    <Flex justifyContent="space-between" alignItems="center" mb={1}>
+                                    <Flex
+                                        justifyContent="space-between"
+                                        alignItems="center"
+                                        mb={1}
+                                        flexDirection={{ base: "column", sm: "row" }}
+                                        gap={{ base: 1, sm: 0 }}
+                                    >
                                         <Text
                                             color="#000000"
                                             fontWeight="600"
-                                            fontSize="20px"
+                                            fontSize={{ base: "16px", md: "20px" }}
                                         >
                                             Top Admin
                                         </Text>
                                         <Text
                                             color="#000000"
                                             fontWeight="600"
-                                            fontSize="14px"
+                                            fontSize={{ base: "12px", md: "14px" }}
                                         >
                                             View all
                                         </Text>
                                     </Flex>
                                     <Flex
-                                        alignItems="flex-start"
-                                        justifyContent="space-between"
+                                        alignItems={{ base: "center", sm: "flex-start" }}
+                                        justifyContent={{ base: "center", sm: "space-between" }}
                                         width="100%"
+                                        flexDirection={{ base: "column", sm: "row" }}
+                                        gap={{ base: 4, sm: 2 }}
                                     >
                                         {/* Left side: Admin profile */}
                                         <VStack spacing={1} align="center">
                                             <Box
-                                                width="84px"
-                                                height="84px"
+                                                width={{ base: "70px", md: "84px" }}
+                                                height={{ base: "70px", md: "84px" }}
                                                 borderRadius="50%"
                                                 overflow="hidden"
                                                 position="relative"
-                                                mt={4}
+                                                mt={{ base: 2, md: 4 }}
                                             >
                                                 <Image src={profileImage} width="100%" height="100%" objectFit="cover"/>
                                             </Box>
-                                            <Text fontStyle="Inter" fontWeight={500} fontSize="12px" lineHeight="160%" color="#161819">
+                                            <Text
+                                                fontStyle="Inter"
+                                                fontWeight={500}
+                                                fontSize={{ base: "11px", md: "12px" }}
+                                                lineHeight="160%"
+                                                color="#161819"
+                                            >
                                                 Carl Meadows
                                             </Text>
-                                            <Text fontStyle="Inter" fontWeight={400} fontSize="10px" lineHeight="160%" color="#161819" opacity={0.5}>
+                                            <Text
+                                                fontStyle="Inter"
+                                                fontWeight={400}
+                                                fontSize={{ base: "9px", md: "10px" }}
+                                                lineHeight="160%"
+                                                color="#161819"
+                                                opacity={0.5}
+                                            >
                                                 Admin
                                             </Text>
                                         </VStack>
 
-                                        {/* Right side: Additional boxes */}
-                                        <VStack spacing={3} align="flex-start" mt={4}>
-                                            <Box width="215px" height="51px" bg="#F4F6F7" borderRadius="md" display="flex" alignItems="center" pl={3}>
-                                                <Text fontWeight={500} opacity={0.5} fontSize="12px">Notices Reviewed:</Text>
-                                                <Text fontWeight={600} fontSize="16px" ml={4}>23353</Text>
+                                        <VStack
+                                            spacing={{ base: 2, md: 3 }}
+                                            align={{ base: "center", sm: "flex-start" }}
+                                            mt={{ base: 0, md: 4 }}
+                                            width={{ base: "100%", sm: "auto" }}
+                                        >
+                                            <Box
+                                                width={{ base: "100%", sm: "180px", md: "215px" }}
+                                                height={{ base: "45px", md: "51px" }}
+                                                bg="#F4F6F7"
+                                                borderRadius="md"
+                                                display="flex"
+                                                alignItems="center"
+                                                justifyContent={{ base: "center", sm: "flex-start" }}
+                                                pl={{ base: 0, sm: 3 }}
+                                            >
+                                                <Text
+                                                    fontWeight={500}
+                                                    opacity={0.5}
+                                                    fontSize={{ base: "10px", md: "12px" }}
+                                                >
+                                                    Notices Reviewed:
+                                                </Text>
+                                                <Text
+                                                    fontWeight={600}
+                                                    fontSize={{ base: "14px", md: "16px" }}
+                                                    ml={4}
+                                                >
+                                                    23353
+                                                </Text>
                                             </Box>
-                                            <Box width="215px" height="51px" bg="#6F6CF3" borderRadius="md" display="flex" alignItems="center"  justifyContent="center">
-                                                <Text color="white" fontWeight={600} fontSize="16px">View Details</Text>
+                                            <Box
+                                                width={{ base: "100%", sm: "180px", md: "215px" }}
+                                                height={{ base: "45px", md: "51px" }}
+                                                bg="#6F6CF3"
+                                                borderRadius="md"
+                                                display="flex"
+                                                alignItems="center"
+                                                justifyContent="center"
+                                                _hover={{ bg: "#5957d7" }}
+                                                cursor="pointer"
+                                                transition="background 0.2s"
+                                            >
+                                                <Text
+                                                    color="white"
+                                                    fontWeight={600}
+                                                    fontSize={{ base: "14px", md: "16px" }}
+                                                >
+                                                    View Details
+                                                </Text>
                                             </Box>
                                         </VStack>
                                     </Flex>

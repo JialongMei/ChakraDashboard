@@ -1,12 +1,12 @@
 import React from 'react';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
-// 移除 ChakraProvider 导入
 import Navigation from './components/Navigation';
 import { LogIn } from './pages/LogIn';
 import SignUp from './pages/SignUp';
 import Dashboard from './pages/Dashboard';
 import Users from './pages/Users';
-import Reviews from './pages/Grid';
+import ReviewsGrid from './pages/Grid';
+import ReviewsList from './pages/List';
 import PrivateRoute from './components/PrivateRoute';
 import PublicRoute from './components/PublicRoute';
 
@@ -23,7 +23,8 @@ function App() {
 
                     <Route element={<PrivateRoute />}>
                         <Route path="/dashboard" element={<Dashboard />} />
-                        <Route path="/dashboard/reviews/grid" element={<Reviews />} />
+                        <Route path="/dashboard/reviews/grid" element={<ReviewsGrid />} />
+                        <Route path="/dashboard/reviews/list" element={<ReviewsList />} />
                         <Route path="/users" element={<Users />} />
                     </Route>
 
