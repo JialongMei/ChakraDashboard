@@ -5,16 +5,10 @@ import {
     Button,
     Container,
     Flex,
-    Field,
-    FieldLabel,
     Heading,
     Input,
     Text,
     VStack,
-    Alert,
-    AlertIndicator,
-    Link,
-    Image
 } from "@chakra-ui/react";
 
 export default function SignUp() {
@@ -44,8 +38,8 @@ export default function SignUp() {
             setEmail("")
             setPassword("")
             login()
-        }else{
-            alert("Please enter a valid email and password")
+        } else {
+            setError("Please enter a valid email and password")
         }
     }
 
@@ -80,17 +74,22 @@ export default function SignUp() {
                     </VStack>
 
                     {error && (
-                        <Alert status="error" mb={4} borderRadius="md">
-                            <AlertIndicator />
+                        <Box
+                            p={3}
+                            mb={4}
+                            borderRadius="md"
+                            bg="red.100"
+                            color="red.700"
+                        >
                             {error}
-                        </Alert>
+                        </Box>
                     )}
 
                     <VStack spacing={4} align="stretch">
-                        <Field>
-                            <FieldLabel fontSize="sm" fontWeight="medium" color="gray.700">
+                        <Box>
+                            <Text fontSize="sm" fontWeight="medium" color="gray.700" mb={2}>
                                 Email
-                            </FieldLabel>
+                            </Text>
                             <Input
                                 type="email"
                                 placeholder="your@email.com"
@@ -100,12 +99,12 @@ export default function SignUp() {
                                 borderRadius="md"
                                 focusBorderColor="#6F6CF3"
                             />
-                        </Field>
+                        </Box>
 
-                        <Field>
-                            <FieldLabel fontSize="sm" fontWeight="medium" color="gray.700">
+                        <Box>
+                            <Text fontSize="sm" fontWeight="medium" color="gray.700" mb={2}>
                                 Password
-                            </FieldLabel>
+                            </Text>
                             <Input
                                 type="password"
                                 placeholder="••••••••"
@@ -115,7 +114,7 @@ export default function SignUp() {
                                 borderRadius="md"
                                 focusBorderColor="#6F6CF3"
                             />
-                        </Field>
+                        </Box>
 
                         <Button
                             bg="#6F6CF3"

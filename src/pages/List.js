@@ -1,765 +1,398 @@
-import Logoutbutton from "../components/LogoutButton";
-import {Avatar, Box, Button, Flex, Grid, GridItem, HStack, Icon, Image, Input, Spacer, VStack} from "@chakra-ui/react";
-import { Text } from "@chakra-ui/react";
-import { ReactComponent as HomeIconSvg } from "../icon/home-2.svg";
-import { ReactComponent as Quote} from "../icon/quote-down-square.svg"
-import { ReactComponent as  Command_square} from "../icon/command-square.svg"
-import { ReactComponent as  Hashtag} from "../icon/hashtag.svg"
-import { ReactComponent as  Notification_bing} from "../icon/notification-bing.svg"
-import { ReactComponent as  Setting} from "../icon/setting.svg"
-import { ReactComponent as  User} from "../icon/filled_user.svg"
-import { ReactComponent as  Search_normal} from "../icon/search-normal.svg"
-import { ReactComponent as  Profile_example } from "../image/Group 35556.svg"
+import LayoutWrapper from "../components/LayoutWrapper";
+import { createIcon, Box, Button, Flex, HStack, Icon, Image, SimpleGrid, Text, VStack } from "@chakra-ui/react";
+import { ReactComponent as Search_normal } from "../icon/search-normal.svg";
+import { useLocation, useNavigate } from "react-router-dom";
 import Image1 from "../image/img_1.png";
-import { ReactComponent as  Logout_icon } from "../icon/logout.svg";
-import {useLocation, useNavigate} from 'react-router-dom';
-import {InputGroup, InputElement, SimpleGrid} from "@chakra-ui/react";
+
+const SearchIcon = createIcon({
+    displayName: "SearchIcon",
+    viewBox: "0 0 24 24",
+    defaultProps: {
+        color: "#161819",
+        opacity: 0.5,
+    },
+    path: (
+        <>
+            <path
+                d="M11 20C15.9706 20 20 15.9706 20 11C20 6.02944 15.9706 2 11 2C6.02944 2 2 6.02944 2 11C2 15.9706 6.02944 20 11 20Z"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                fill="none"
+            />
+            <path
+                d="M18.9299 20.6898C19.4599 22.2898 20.6699 22.4498 21.5999 21.0498C22.4499 19.7698 21.8899 18.7198 20.3499 18.7198C19.2099 18.7098 18.5699 19.5998 18.9299 20.6898Z"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                fill="none"
+            />
+        </>
+    ),
+});
 
 
-const MobileNav = () => {
+const ListItem = () => {
     return (
-        <Flex
-            justify="space-between"
-            align="center"
-            p={3}
-            display={{ base: "flex", md: "none" }}
+        <HStack
             bg="white"
-            boxShadow="sm"
+            p={3}
+            borderRadius="lg"
+            alignItems="flex-start"
+            justifyContent="space-between"
+            height={{ base: "90px", md: "100px" }}
+            spacing={2}
+            flexWrap={{ base: "wrap", md: "nowrap" }}
         >
-            <Text fontFamily="Urbanist" fontWeight={900} fontSize="20px">LOGO</Text>
-            <Icon as={Setting} width="20px" height="20px" />
-        </Flex>
-    );
-};
-
-const MenuItem = ({ icon, text, isActive, to, notifications}) => {
-    const navigate = useNavigate();
-
-    const handleClick = () => {
-        if(to) {
-            navigate(to);
-        }
-    }
-
-    return (
-        <Grid
-            templateColumns="24px minmax(0, 1fr) auto"
-            width="100%"
-            height="40px"
-            borderRadius="10px"
-            bg={isActive ? "#6F6FC3" : "transparent"}
-            alignItems="center"
-            padding="0 12px"
-            gap="10px"
-            _hover={{ bg: isActive ? "#6F6FC3" : "gray.100" }}
-            cursor="pointer"
-            onClick={handleClick}
-            role={to ? "link" : "button"}
-        >
-            <GridItem display="flex" alignItems="center" justifyContent="center" flexShrink={0}>
-                <Icon
-                    as={icon}
-                    width="20px"
-                    height="20px"
-                    color={isActive ? "white" : "#333"}
-                    fill="currentColor"
-                />
-            </GridItem>
-            <GridItem overflow="hidden">
-                <Text
-                    color={isActive ? "white" : "black"}
+            <Flex>
+                <Box
+                    width={{ base: "70px", md: "80px" }}
+                    height={{ base: "70px", md: "80px" }}
+                    borderRadius="md"
                     overflow="hidden"
-                    textOverflow="ellipsis"
-                    whiteSpace="nowrap"
-                    fontSize={{ base: "sm", md: "md" }}
+                    flexShrink={0}
                 >
-                    {text}
-                </Text>
-            </GridItem>
-            {notifications === 3 && (
-                <GridItem>
-                    <Box width="16px" height="16px" bg="red" borderRadius="50%" display="flex" justifyContent="center" alignItems="center">
-                        <Text color="white"> {notifications} </Text>
-                    </Box>
-                </GridItem>
-            )}
-        </Grid>
-    );
-};
-
-const SideBox = () => {
-    return (
-        <Box
-            bg="#ffffff"
-            width="205px"
-            height="100%"
-            boxShadow="sm"
-        >
-            <Grid
-                templateRows="auto 1fr"
-                gap="20px"
-                padding="30px 8px"
-                height="100%"
-            >
-                <GridItem>
+                    <Image src={Image1} width="100%" height="100%" objectFit="cover" />
+                </Box>
+                <Box
+                    width={{ base: "100px", sm: "150px", md: "100%" }}
+                    ml={4}
+                    mt={4}
+                    overflow="hidden"
+                >
                     <Text
-                        fontFamily="Urbanist"
-                        fontWeight={900}
-                        fontSize="28px"
-                        lineHeight="140%"
-                        color="#161819"
-                        whiteSpace="nowrap"
-                        ml={4}
+                        fontSize={{ base: "xs", sm: "sm", md: "md" }}
+                        fontWeight={500}
+                        noOfLines={1}
+                        overflow="hidden"
+                        textOverflow="ellipsis"
+                        width="100%"
+                        color="black"
+                        isTruncated
                     >
-                        LOGO
+                        Product title goes here
                     </Text>
-                </GridItem>
-
-                <GridItem>
-                    <Grid gap="20px">
-                        <GridItem>
-                            <MenuItem
-                                icon={HomeIconSvg}
-                                text="Dashboard"
-                                isActive={false}
-                                to = "/dashboard"
-                            />
-                        </GridItem>
-                        <GridItem>
-                            <MenuItem
-                                icon={Quote}
-                                text="Reviews"
-                                isActive={true}
-                                to = "/dashboard/reviews/grid"
-                            />
-                        </GridItem>
-                        <GridItem>
-                            <MenuItem
-                                icon={Hashtag}
-                                text="Keywords"
-                                isActive={false}
-                            />
-                        </GridItem>
-                        <GridItem>
-                            <MenuItem
-                                icon={Command_square}
-                                text="Web crawler"
-                                isActive={false}
-                            />
-                        </GridItem>
-                        <GridItem>
-                            <MenuItem
-                                icon={Notification_bing}
-                                text="Notifications"
-                                notifications={3}
-                                isActive={false}
-                            />
-                        </GridItem>
-                        <GridItem>
-                            <MenuItem
-                                icon={Setting}
-                                text="Settings"
-                                isActive={false}
-                            />
-                        </GridItem>
-                        <GridItem>
-                            <MenuItem
-                                icon={User}
-                                text="User management"
-                                isActive={false}
-                            />
-                        </GridItem>
-                    </Grid>
-                </GridItem>
-                <GridItem gap="290px">
-                    <Flex ml={4} gap={2}>
-                        <Logout_icon/>
-                        <Logoutbutton/>
-                    </Flex>
-                </GridItem>
-            </Grid>
-        </Box>
+                    <Text
+                        fontSize={{ base: "2xs", sm: "xs" }}
+                        fontWeight={400}
+                        opacity={0.6}
+                        noOfLines={{ base: 1, md: 1 }}
+                        overflow="hidden"
+                        textOverflow="ellipsis"
+                        width="100%"
+                        color="gray.500"
+                        isTruncated
+                    >
+                        https://yourproducturlgoeshere1122.com
+                    </Text>
+                </Box>
+                <Box
+                    borderRadius="lg"
+                    width="95px"
+                    height="34px"
+                    ml={4}
+                    mt={6}
+                    bg="green.100"
+                    px={3}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                >
+                    <Text color="green.500">Removed</Text>
+                </Box>
+            </Flex>
+            <VStack
+                spacing={2}
+                flexShrink={0}
+                alignItems="center"
+                height="100%"
+                display={{ base: "flex", md: "none" }}
+            >
+                <Button
+                    size="sm"
+                    bg="black"
+                    color="white"
+                    _hover={{ bg: "gray.700" }}
+                    height={{ base: "30px", md: "36px" }}
+                    width="36px"
+                    minWidth="36px"
+                    p={0}
+                >
+                    <SearchIcon  color="white" boxSize={4} />
+                </Button>
+                <Button
+                    size="sm"
+                    bg="#6F6CF3"
+                    color="white"
+                    _hover={{ bg: "#5957d7" }}
+                    height={{ base: "30px", md: "36px" }}
+                    width="36px"
+                    minWidth="36px"
+                    p={0}
+                >
+                    <SearchIcon  color="white" boxSize={4} />
+                </Button>
+            </VStack>
+            <HStack
+                spacing={2}
+                flexShrink={0}
+                alignItems="center"
+                height="100%"
+                display={{ base: "none", md: "flex" }}
+            >
+                <Button
+                    size="sm"
+                    bg="black"
+                    color="white"
+                    _hover={{ bg: "gray.700" }}
+                    height={{ base: "30px", md: "36px" }}
+                    fontSize={{ base: "xs", md: "sm" }}
+                    px={{ base: 3, md: 4 }}
+                >
+                    Source
+                </Button>
+                <Button
+                    size="sm"
+                    bg="#6F6CF3"
+                    color="white"
+                    _hover={{ bg: "#5957d7" }}
+                    height={{ base: "30px", md: "36px" }}
+                    fontSize={{ base: "xs", md: "sm" }}
+                    px={{ base: 3, md: 4 }}
+                >
+                    View Details
+                </Button>
+            </HStack>
+        </HStack>
     );
 };
 
-const MainContent = ({ children, to }) => {
+const MainContent = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const handleClick = () => {
-        if (to) {
-            navigate(to);
-        }
-    }
+    const isGridView = location.pathname.includes("/grid");
+    const isListView = location.pathname.includes("/list");
 
     return (
-        <Box
-            padding={{ base: 3, sm: 4 }}
-            width="100%"
-            height="100vh"
-            overflow="hidden"
-        >
-            <MobileNav />
-
-            <Grid
-                templateRows="auto auto auto 1fr"
-                gap={{ base: "8px", md: "12px" }}
-                height="100%"
+        <Box>
+            <Flex
+                justify="space-between"
+                align="center"
+                flexDirection={{ base: "column", md: "row" }}
+                gap={{ base: 3, md: 0 }}
+                mb={{ base: 4, md: 6 }}
+                pt={{ base: 2, md: 0 }}
             >
-                {/* Header Section with Search and Profile */}
-                <GridItem>
-                    <Flex
-                        justify="space-between"
-                        align="center"
-                        flexDirection={{ base: "column", md: "row" }}
-                        gap={{ base: 2, md: 0 }}
-                    >
-                        <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="bold">Reviews</Text>
+                <Text fontWeight="medium" fontSize={{ base: "md", md: "lg" }} color="black">
+                    Product List
+                </Text>
 
+                <Flex align="center" flexWrap="wrap" gap={2}>
+                    <Button
+                        size="sm"
+                        onClick={() => navigate("/dashboard/reviews/grid")}
+                        bg={isGridView ? "black" : "white"}
+                        color={isGridView ? "white" : "black"}
+                        borderRadius="md"
+                        fontWeight="medium"
+                        height="30px"
+                        minWidth="80px"
+                        border="1px solid"
+                        borderColor={isGridView ? "black" : "gray.200"}
+                        _hover={{
+                            bg: isGridView ? "gray.800" : "gray.100",
+                            transform: "translateY(-2px)",
+                            boxShadow: "sm",
+                        }}
+                    >
+                        Grid View
+                    </Button>
+                    <Button
+                        size="sm"
+                        onClick={() => navigate("/dashboard/reviews/list")}
+                        bg={isListView ? "black" : "white"}
+                        color={isListView ? "white" : "black"}
+                        borderRadius="md"
+                        fontWeight="medium"
+                        height="30px"
+                        minWidth="80px"
+                        border="1px solid"
+                        borderColor={isListView ? "black" : "gray.200"}
+                        _hover={{
+                            bg: isListView ? "gray.800" : "gray.100",
+                            transform: "translateY(-2px)",
+                            boxShadow: "sm",
+                        }}
+                    >
+                        List View
+                    </Button>
+                </Flex>
+            </Flex>
+
+            <Box
+                overflow="auto"
+                height="fit-content"
+                minHeight="0"
+            >
+                <SimpleGrid columns={1} spacing={{ base: 3, md: 4 }} gap={{ base: "2", sm: "4", md: "5" }}>
+                    {[...Array(2)].map((_, index) => (
+                        <ListItem key={index} />
+                    ))}
+                    <HStack
+                        bg="white"
+                        p={3}
+                        borderRadius="lg"
+                        alignItems="flex-start"
+                        justifyContent="space-between"
+                        height={{ base: "90px", md: "100px" }}
+                        spacing={2}
+                    >
                         <Flex
-                            align="center"
-                            width={{ base: "100%", md: "auto" }}
-                            flexDirection={{ base: "column", md: "row" }}
-                            gap={{ base: 2, md: 3 }}
+                            flexDirection={{ base: "column", sm: "row" }}
+                            flexWrap={{ base: "wrap", sm: "nowrap" }}
+                            alignItems={{ base: "flex-start", sm: "center" }}
+                            width="100%"
                         >
-                            <InputGroup w={{ base: "100%", md: "250px", lg: "400px" }}>
-                                <Input
-                                    placeholder="Search"
-                                    borderRadius="md"
-                                    bg="white"
-                                    size="sm"
-                                    rightElement={
-                                        <InputElement placement="right">
-                                            <Icon
-                                                as={Search_normal}
-                                                opacity="50%"
-                                                color="gray.400"
-                                                boxSize="20px"
-                                            />
-                                        </InputElement>
-                                    }
-                                />
-                            </InputGroup>
-                            <Box display={{ base: "none", md: "block" }}>
-                                <Profile_example/>
+                            <Box
+                                width={{ base: "70px", md: "80px" }}
+                                height={{ base: "70px", md: "80px" }}
+                                borderRadius="md"
+                                overflow="hidden"
+                                flexShrink={0}
+                            >
+                                <Image src={Image1} width="100%" height="100%" objectFit="cover" />
+                            </Box>
+                            <Box
+                                width={{ base: "calc(100% - 80px)", sm: "auto", md: "auto" }}
+                                maxWidth={{ base: "100%", sm: "40%", md: "45%" }}
+                                ml={4}
+                                mt={{ base: 4, sm: 0 }}
+                                overflow="hidden"
+                            >
+                                <Text
+                                    fontSize={{ base: "xs", sm: "sm", md: "md" }}
+                                    fontWeight={500}
+                                    noOfLines={1}
+                                    overflow="hidden"
+                                    textOverflow="ellipsis"
+                                    width="100%"
+                                    color="black"
+                                    isTruncated
+                                >
+                                    Product title goes here
+                                </Text>
+                                <Text
+                                    fontSize={{ base: "2xs", sm: "xs" }}
+                                    fontWeight={400}
+                                    opacity={0.6}
+                                    noOfLines={{ base: 1, md: 1 }}
+                                    overflow="hidden"
+                                    textOverflow="ellipsis"
+                                    width="100%"
+                                    color="gray.500"
+                                    isTruncated
+                                >
+                                    https://yourproducturlgoeshere1122.com
+                                </Text>
+                            </Box>
+                            <Box
+                                borderRadius="lg"
+                                minWidth={{ base: "110px", sm: "130px" }}
+                                height="34px"
+                                ml={{ base: 0, sm: 4 }}
+                                mt={{ base: 2, sm: 0 }}
+                                bg="orange.100"
+                                px={3}
+                                display="flex"
+                                alignItems="center"
+                                justifyContent="center"
+                            >
+                                <Text color="orange.500" whiteSpace="nowrap" fontSize={{ base: "xs", sm: "sm" }}>Reminder Sent</Text>
                             </Box>
                         </Flex>
-                    </Flex>
-                </GridItem>
 
-                <Spacer/>
-
-                {/* Date and Filter Section */}
-                <GridItem>
-                    <Flex
-                        justify="space-between"
-                        align="center"
-                        flexDirection={{ base: "column", md: "row" }}
-                        gap={{ base: 2, md: 3}}
-                    >
-                        <Text fontWeight="medium" fontSize={{ base: "sm", md: "md" }}>Product List</Text>
-
-                        <Flex
-                            align="center"
-                            flexWrap="wrap"
-                            gap={1}
+                        {/* olny icons for mobile */}
+                        <VStack
+                            spacing={2}
+                            flexShrink={0}
+                            alignItems="center"
+                            height="100%"
+                            display={{ base: "flex", lg: "none" }}
                         >
                             <Button
-                                size="s"
-                                variant="outline"
-                                mr={1}
-                                onClick={() => navigate('/dashboard/reviews/grid')}
-                                bg={location.pathname.includes('/grid') ? "black" : "white"}
-                                _hover={{ bg: "purple.50" }}
-                                position="relative"
-                                px={4}
-                                minWidth="80px"
-                                height="24px"
+                                size="sm"
+                                bg="black"
+                                color="white"
+                                _hover={{ bg: "gray.700" }}
+                                height={{ base: "30px", md: "36px" }}
+                                width="36px"
+                                minWidth="36px"
+                                p={0}
                             >
-                                <Box
-                                    position="absolute"
-                                    width="70%"
-                                    textAlign="center"
-                                >
-                                    <Text
-                                        fontSize="12px"
-                                        color={location.pathname.includes('/grid') ? "white" : "black"}
-                                        whiteSpace="nowrap"
-                                        overflow="hidden"
-                                        textOverflow="ellipsis"
-                                    >
-                                        Grid View
-                                    </Text>
-                                </Box>
+                                <Icon as={Search_normal} boxSize={4} />
                             </Button>
                             <Button
-                                size="s"
-                                variant="outline"
-                                mr={1}
-                                onClick={() => navigate('/dashboard/reviews/list')}
-                                bg={location.pathname.includes('/list') ? "black" : "white"}
-                                _hover={{ bg: "purple.50" }}
-                                position="relative"
-                                px={4}
-                                minWidth="80px"
-                                height="24px"
+                                size="sm"
+                                bg="#6F6CF3"
+                                color="white"
+                                _hover={{ bg: "#5957d7" }}
+                                height={{ base: "30px", md: "36px" }}
+                                width="36px"
+                                minWidth="36px"
+                                p={0}
                             >
-                                <Box
-                                    position="absolute"
-                                    width="70%"
-                                    textAlign="center"
-                                >
-                                    <Text
-                                        fontSize="12px"
-                                        color={location.pathname.includes('/list') ? "white" : "black"}
-                                        whiteSpace="nowrap"
-                                        overflow="hidden"
-                                        textOverflow="ellipsis"
-                                    >
-                                        List View
-                                    </Text>
-                                </Box>
+                                <Icon as={Search_normal} boxSize={4} />
                             </Button>
-                        </Flex>
-                    </Flex>
-                </GridItem>
+                        </VStack>
 
-                {/* Product Grid */}
-                <GridItem overflow="auto" maxHeight="calc(100vh - 140px)">
-                    <SimpleGrid columns={1} spacing={{ base: 3, md: 4, lg: 6 , xl: 8 }}>
+                        {/* text button for bigger screen */}
                         <HStack
-                            bg="white"
-                            p={3}
-                            borderRadius="lg"
-                            boxShadow="sm"
-                            alignItems="flex-start"
-                            justifyContent="space-between"
-                            height={{ base: "90px", md: "100px" }}
                             spacing={2}
+                            flexShrink={0}
+                            alignItems="center"
+                            height="100%"
+                            display={{ base: "none", lg: "flex" }}
                         >
-                            <Flex>
-                                <Box width={{ base: "70px", md: "80px" }}  height={{ base: "70px", md: "80px" }} borderRadius="md" overflow="hidden" flexShrink={0}>
-                                    <Image src={Image1} width="100%" height="100%" objectFit="cover"/>
-                                </Box>
-                                <Box width="100%" height="30%" ml={4} mt={4}>
-                                    <Text
-                                        fontSize={{ base: "xs", sm: "sm", md: "md" }}
-                                        fontWeight={500}
-                                        noOfLines={1}
-                                        overflow="hidden"
-                                        textOverflow="ellipsis"
-                                        width="100%"
-                                    >
-                                        Product title goes here
-                                    </Text>
-                                    <Text
-                                        fontSize={{ base: "2xs", sm: "xs" }}
-                                        fontWeight={400}
-                                        opacity={0.6}
-                                        noOfLines={1}
-                                        overflow="hidden"
-                                        textOverflow="ellipsis"
-                                        width="100%"
-                                    >
-                                        https://yourproducturlgoeshere1122.com
-                                    </Text>
-                                </Box>
-                                <Box borderRadius="lg" width="95px" height="34px" ml={4} mt={6} bg="green.100" px={3}>
-                                    <Text mt={1} color="green.500">Removed</Text>
-                                </Box>
-                            </Flex>
-                            <HStack spacing={2} flexShrink={0} alignItems="center" height="100%">
-                                <Button
-                                    size="sm"
-                                    bg="black"
-                                    color="white"
-                                    _hover={{ bg: "gray.700" }}
-                                    height={{ base: "30px", md: "36px" }}
-                                    fontSize={{ base: "xs", md: "sm" }}
-                                    px={{ base: 3, md: 4 }}
-                                >
-                                    Source
-                                </Button>
-                                <Button
-                                    size="sm"
-                                    bg="#6F6CF3"
-                                    color="white"
-                                    _hover={{ bg: "#5957d7" }}
-                                    height={{ base: "30px", md: "36px" }}
-                                    fontSize={{ base: "xs", md: "sm" }}
-                                    px={{ base: 3, md: 4 }}
-                                >
-                                    View Details
-                                </Button>
-                            </HStack>
+                            <Button
+                                size="sm"
+                                bg="black"
+                                color="white"
+                                _hover={{ bg: "gray.700" }}
+                                height={{ base: "30px", md: "36px" }}
+                                fontSize={{ base: "xs", md: "sm" }}
+                                px={{ base: 3, md: 4 }}
+                            >
+                                Source
+                            </Button>
+                            <Button
+                                size="sm"
+                                bg="#6F6CF3"
+                                color="white"
+                                _hover={{ bg: "#5957d7" }}
+                                height={{ base: "30px", md: "36px" }}
+                                fontSize={{ base: "xs", md: "sm" }}
+                                px={{ base: 3, md: 4 }}
+                            >
+                                View Details
+                            </Button>
                         </HStack>
-                        <HStack
-                            bg="white"
-                            p={3}
-                            borderRadius="lg"
-                            boxShadow="sm"
-                            alignItems="flex-start"
-                            justifyContent="space-between"
-                            height={{ base: "90px", md: "100px" }}
-                            spacing={2}
-                        >
-                            <Flex>
-                                <Box width={{ base: "70px", md: "80px" }}  height={{ base: "70px", md: "80px" }} borderRadius="md" overflow="hidden" flexShrink={0}>
-                                    <Image src={Image1} width="100%" height="100%" objectFit="cover"/>
-                                </Box>
-                                <Box width="100%" height="30%" ml={4} mt={4}>
-                                    <Text
-                                        fontSize={{ base: "xs", sm: "sm", md: "md" }}
-                                        fontWeight={500}
-                                        noOfLines={1}
-                                        overflow="hidden"
-                                        textOverflow="ellipsis"
-                                        width="100%"
-                                    >
-                                        Product title goes here
-                                    </Text>
-                                    <Text
-                                        fontSize={{ base: "2xs", sm: "xs" }}
-                                        fontWeight={400}
-                                        opacity={0.6}
-                                        noOfLines={1}
-                                        overflow="hidden"
-                                        textOverflow="ellipsis"
-                                        width="100%"
-                                    >
-                                        https://yourproducturlgoeshere1122.com
-                                    </Text>
-                                </Box>
-                                <Box borderRadius="lg" width="95px" height="34px" ml={4} mt={6} bg="green.100" px={3}>
-                                    <Text mt={1} color="green.500">Removed</Text>
-                                </Box>
-                            </Flex>
-                            <HStack spacing={2} flexShrink={0} alignItems="center" height="100%">
-                                <Button
-                                    size="sm"
-                                    bg="black"
-                                    color="white"
-                                    _hover={{ bg: "gray.700" }}
-                                    height={{ base: "30px", md: "36px" }}
-                                    fontSize={{ base: "xs", md: "sm" }}
-                                    px={{ base: 3, md: 4 }}
-                                >
-                                    Source
-                                </Button>
-                                <Button
-                                    size="sm"
-                                    bg="#6F6CF3"
-                                    color="white"
-                                    _hover={{ bg: "#5957d7" }}
-                                    height={{ base: "30px", md: "36px" }}
-                                    fontSize={{ base: "xs", md: "sm" }}
-                                    px={{ base: 3, md: 4 }}
-                                >
-                                    View Details
-                                </Button>
-                            </HStack>
-                        </HStack>
-                        <HStack
-                            bg="white"
-                            p={3}
-                            borderRadius="lg"
-                            boxShadow="sm"
-                            alignItems="flex-start"
-                            justifyContent="space-between"
-                            height={{ base: "90px", md: "100px" }}
-                            spacing={2}
-                        >
-                            <Flex>
-                                <Box width={{ base: "70px", md: "80px" }}  height={{ base: "70px", md: "80px" }} borderRadius="md" overflow="hidden" flexShrink={0}>
-                                    <Image src={Image1} width="100%" height="100%" objectFit="cover"/>
-                                </Box>
-                                <Box width="100%" height="30%" ml={4} mt={4}>
-                                    <Text
-                                        fontSize={{ base: "xs", sm: "sm", md: "md" }}
-                                        fontWeight={500}
-                                        noOfLines={1}
-                                        overflow="hidden"
-                                        textOverflow="ellipsis"
-                                        width="100%"
-                                    >
-                                        Product title goes here
-                                    </Text>
-                                    <Text
-                                        fontSize={{ base: "2xs", sm: "xs" }}
-                                        fontWeight={400}
-                                        opacity={0.6}
-                                        noOfLines={1}
-                                        overflow="hidden"
-                                        textOverflow="ellipsis"
-                                        width="100%"
-                                    >
-                                        https://yourproducturlgoeshere1122.com
-                                    </Text>
-                                </Box>
-                                <Box borderRadius="lg" width="95px" height="34px" ml={4} mt={6} bg="green.100" px={3}>
-                                    <Text mt={1} color="green.500">Removed</Text>
-                                </Box>
-                            </Flex>
-                            <HStack spacing={2} flexShrink={0} alignItems="center" height="100%">
-                                <Button
-                                    size="sm"
-                                    bg="black"
-                                    color="white"
-                                    _hover={{ bg: "gray.700" }}
-                                    height={{ base: "30px", md: "36px" }}
-                                    fontSize={{ base: "xs", md: "sm" }}
-                                    px={{ base: 3, md: 4 }}
-                                >
-                                    Source
-                                </Button>
-                                <Button
-                                    size="sm"
-                                    bg="#6F6CF3"
-                                    color="white"
-                                    _hover={{ bg: "#5957d7" }}
-                                    height={{ base: "30px", md: "36px" }}
-                                    fontSize={{ base: "xs", md: "sm" }}
-                                    px={{ base: 3, md: 4 }}
-                                >
-                                    View Details
-                                </Button>
-                            </HStack>
-                        </HStack>
-                        <HStack
-                            bg="white"
-                            p={3}
-                            borderRadius="lg"
-                            boxShadow="sm"
-                            alignItems="flex-start"
-                            justifyContent="space-between"
-                            height={{ base: "90px", md: "100px" }}
-                            spacing={2}
-                        >
-                            <Flex>
-                                <Box width={{ base: "70px", md: "80px" }}  height={{ base: "70px", md: "80px" }} borderRadius="md" overflow="hidden" flexShrink={0}>
-                                    <Image src={Image1} width="100%" height="100%" objectFit="cover"/>
-                                </Box>
-                                <Box width="100%" height="30%" ml={4} mt={4} flex="1">
-                                    <Text
-                                        fontSize={{ base: "xs", sm: "sm", md: "md" }}
-                                        fontWeight={500}
-                                        noOfLines={1}
-                                        overflow="hidden"
-                                        textOverflow="ellipsis"
-                                        width="100%"
-                                    >
-                                        Product title goes here
-                                    </Text>
-                                    <Text
-                                        fontSize={{ base: "2xs", sm: "xs" }}
-                                        fontWeight={400}
-                                        opacity={0.6}
-                                        noOfLines={1}
-                                        overflow="hidden"
-                                        textOverflow="ellipsis"
-                                        width="100%"
-                                    >
-                                        https://yourproducturlgoeshere1122.com
-                                    </Text>
-                                </Box>
-                                <Box
-                                    borderRadius="lg"
-                                    width="140px"
-                                    height="34px"
-                                    bg="orange.100"
-                                    px={3}
-                                    flexShrink={0}
-                                    ml={4}
-                                    mt={4}
-                                    display="flex"
-                                    alignItems="center"
-                                    justifyContent="center"
-                                >
-                                    <Text color="orange.500">Reminder Sent</Text>
-                                </Box>
-                            </Flex>
-                            <HStack spacing={2} flexShrink={0} alignItems="center" height="100%">
-                                <Button
-                                    size="sm"
-                                    bg="black"
-                                    color="white"
-                                    _hover={{ bg: "gray.700" }}
-                                    height={{ base: "30px", md: "36px" }}
-                                    fontSize={{ base: "xs", md: "sm" }}
-                                    px={{ base: 3, md: 4 }}
-                                >
-                                    Source
-                                </Button>
-                                <Button
-                                    size="sm"
-                                    bg="#6F6CF3"
-                                    color="white"
-                                    _hover={{ bg: "#5957d7" }}
-                                    height={{ base: "30px", md: "36px" }}
-                                    fontSize={{ base: "xs", md: "sm" }}
-                                    px={{ base: 3, md: 4 }}
-                                >
-                                    View Details
-                                </Button>
-                            </HStack>
-                        </HStack>
-                        <HStack
-                            bg="white"
-                            p={3}
-                            borderRadius="lg"
-                            boxShadow="sm"
-                            alignItems="flex-start"
-                            justifyContent="space-between"
-                            height={{ base: "90px", md: "100px" }}
-                            spacing={2}
-                        >
-                            <Flex>
-                                <Box width={{ base: "70px", md: "80px" }}  height={{ base: "70px", md: "80px" }} borderRadius="md" overflow="hidden" flexShrink={0}>
-                                    <Image src={Image1} width="100%" height="100%" objectFit="cover"/>
-                                </Box>
-                                <Box width="100%" height="30%" ml={4} mt={4}>
-                                    <Text
-                                        fontSize={{ base: "xs", sm: "sm", md: "md" }}
-                                        fontWeight={500}
-                                        noOfLines={1}
-                                        overflow="hidden"
-                                        textOverflow="ellipsis"
-                                        width="100%"
-                                    >
-                                        Product title goes here
-                                    </Text>
-                                    <Text
-                                        fontSize={{ base: "2xs", sm: "xs" }}
-                                        fontWeight={400}
-                                        opacity={0.6}
-                                        noOfLines={1}
-                                        overflow="hidden"
-                                        textOverflow="ellipsis"
-                                        width="100%"
-                                    >
-                                        https://yourproducturlgoeshere1122.com
-                                    </Text>
-                                </Box>
-                                <Box borderRadius="lg" width="95px" height="34px" ml={4} mt={6} bg="green.100" px={3}>
-                                    <Text mt={1} color="green.500">Removed</Text>
-                                </Box>
-                            </Flex>
-                            <HStack spacing={2} flexShrink={0} alignItems="center" height="100%">
-                                <Button
-                                    size="sm"
-                                    bg="black"
-                                    color="white"
-                                    _hover={{ bg: "gray.700" }}
-                                    height={{ base: "30px", md: "36px" }}
-                                    fontSize={{ base: "xs", md: "sm" }}
-                                    px={{ base: 3, md: 4 }}
-                                >
-                                    Source
-                                </Button>
-                                <Button
-                                    size="sm"
-                                    bg="#6F6CF3"
-                                    color="white"
-                                    _hover={{ bg: "#5957d7" }}
-                                    height={{ base: "30px", md: "36px" }}
-                                    fontSize={{ base: "xs", md: "sm" }}
-                                    px={{ base: 3, md: 4 }}
-                                >
-                                    View Details
-                                </Button>
-                            </HStack>
-                        </HStack>
-                        <HStack
-                            bg="white"
-                            p={3}
-                            borderRadius="lg"
-                            boxShadow="sm"
-                            alignItems="flex-start"
-                            justifyContent="space-between"
-                            height={{ base: "90px", md: "100px" }}
-                            spacing={2}
-                        >
-                            <Flex>
-                                <Box width={{ base: "70px", md: "80px" }}  height={{ base: "70px", md: "80px" }} borderRadius="md" overflow="hidden" flexShrink={0}>
-                                    <Image src={Image1} width="100%" height="100%" objectFit="cover"/>
-                                </Box>
-                                <Box width="100%" height="30%" ml={4} mt={4}>
-                                    <Text
-                                        fontSize={{ base: "xs", sm: "sm", md: "md" }}
-                                        fontWeight={500}
-                                        noOfLines={1}
-                                        overflow="hidden"
-                                        textOverflow="ellipsis"
-                                        width="100%"
-                                    >
-                                        Product title goes here
-                                    </Text>
-                                    <Text
-                                        fontSize={{ base: "2xs", sm: "xs" }}
-                                        fontWeight={400}
-                                        opacity={0.6}
-                                        noOfLines={1}
-                                        overflow="hidden"
-                                        textOverflow="ellipsis"
-                                        width="100%"
-                                    >
-                                        https://yourproducturlgoeshere1122.com
-                                    </Text>
-                                </Box>
-                                <Box borderRadius="lg" width="95px" height="34px" ml={4} mt={6} bg="green.100" px={3}>
-                                    <Text mt={1} color="green.500">Removed</Text>
-                                </Box>
-                            </Flex>
-                            <HStack spacing={2} flexShrink={0} alignItems="center" height="100%">
-                                <Button
-                                    size="sm"
-                                    bg="black"
-                                    color="white"
-                                    _hover={{ bg: "gray.700" }}
-                                    height={{ base: "30px", md: "36px" }}
-                                    fontSize={{ base: "xs", md: "sm" }}
-                                    px={{ base: 3, md: 4 }}
-                                >
-                                    Source
-                                </Button>
-                                <Button
-                                    size="sm"
-                                    bg="#6F6CF3"
-                                    color="white"
-                                    _hover={{ bg: "#5957d7" }}
-                                    height={{ base: "30px", md: "36px" }}
-                                    fontSize={{ base: "xs", md: "sm" }}
-                                    px={{ base: 3, md: 4 }}
-                                >
-                                    View Details
-                                </Button>
-                            </HStack>
-                        </HStack>
-                    </SimpleGrid>
-                </GridItem>
-            </Grid>
+                    </HStack>
+                    {[...Array(3)].map((_, index) => (
+                        <ListItem key={index} />
+                    ))}
+                </SimpleGrid>
+            </Box>
         </Box>
     );
 };
 
-export default function Productgrid() {
+export default function ProductList() {
     return (
-        <Grid
-            templateColumns={{
-                base: "1fr",
-                md: "200px 1fr"
-            }}
-            width="100%"
-            height="100vh"
-            bg="#f8f4fc"
-            overflow="hidden"
-        >
-            <GridItem display={{ base: "none", md: "block" }}>
-                <SideBox />
-            </GridItem>
-            <GridItem overflow="hidden">
-                <MainContent />
-            </GridItem>
-        </Grid>
+        <LayoutWrapper>
+            <MainContent />
+        </LayoutWrapper>
     );
 }
