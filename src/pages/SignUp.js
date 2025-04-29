@@ -93,6 +93,7 @@ export default function SignUp() {
                             <Input
                                 type="email"
                                 placeholder="your@email.com"
+                                color="black"
                                 size="md"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
@@ -108,6 +109,7 @@ export default function SignUp() {
                             <Input
                                 type="password"
                                 placeholder="••••••••"
+                                color="black"
                                 size="md"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}

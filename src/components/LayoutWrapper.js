@@ -110,7 +110,7 @@ const MenuItem = ({ icon, text, isActive, to, notifications }) => {
             {notifications !== 0 && (
                 <GridItem>
                     <Box width="16px" height="16px" bg="red" borderRadius="50%" display="flex" justifyContent="center" alignItems="center">
-                        <Text color="white"> {notifications} </Text>
+                        <Text color="white" fontSize="12px"> {notifications} </Text>
                     </Box>
                 </GridItem>
             )}
@@ -121,7 +121,6 @@ const MenuItem = ({ icon, text, isActive, to, notifications }) => {
 const SideBox = () => {
     const location = useLocation();
 
-    // 确定当前活跃页面
     const isDashboard = location.pathname === "/dashboard" || location.pathname === "/dashboard/";
     const isReviews = location.pathname.includes("/dashboard/reviews");
     const isKeywords = location.pathname.includes("/dashboard/keywords");
@@ -134,7 +133,28 @@ const SideBox = () => {
         <Box
             bg="#ffffff"
             width="225px"
-            height="100%"
+            // height="100%"
+            position="fixed"
+            bottom={0}
+            top={0}
+            overflow="hidden"
+            _hover={{
+                overflow: "auto",
+            }}
+            css={{
+                '&::-webkit-scrollbar': {
+                    width: '6px',
+                },
+                '&::-webkit-scrollbar-track': {
+                    background: 'transparent',
+                },
+                '&::-webkit-scrollbar-thumb': {
+                    background: '#CBD5E0',
+                    borderRadius: '3px',
+                },
+                scrollbarWidth: 'thin',
+                scrollbarColor: '#CBD5E0 transparent',
+            }}
         >
             <Grid
                 templateRows="auto 1fr"
@@ -381,21 +401,18 @@ const LayoutWrapper = ({ children, pageTitle = "Dashboard" }) => {
             width="100%"
             height="100vh"
             bg="#f8f4fc"
-            overflow="hidden"
+            overflow="auto" // Changed from hidden to auto
         >
             <GridItem display={{ base: "none", md: "block" }}>
                 <SideBox />
             </GridItem>
 
-            <GridItem overflow="hidden">
+            <GridItem overflow="auto"> // Changed from hidden to auto
                 <Box
                     padding={{ base: 4, md: 6 }}
                     width="100%"
-                    height="100vh"
-                    overflow="hidden"
-                    _hover={{
-                        overflow: "auto"
-                    }}
+                    height="100%" // Changed from 100vh to 100%
+                    overflow="auto" // Always auto instead of hidden with hover
                     css={{
                         '&::-webkit-scrollbar': {
                             width: '6px',
@@ -416,7 +433,7 @@ const LayoutWrapper = ({ children, pageTitle = "Dashboard" }) => {
                     <Grid
                         templateRows="auto 1fr"
                         gap={{ base: "12px", md: "20px" }}
-                        height="100%"
+                        height="auto" // Changed from 100% to auto
                     >
                         <GridItem>
                             <PageHeader title={dynamicTitle} />

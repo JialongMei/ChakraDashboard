@@ -19,7 +19,6 @@ import React from "react";
                               <Flex align="center" opacity="60%" mb={{ base: 2, md: 3 }} flexWrap="wrap">
                                   {icon && <Icon as={icon} mr={2} boxSize={{ base: "16px", md: "18px" }} />}
                                   <Text
-                                      fontFamily="Inter"
                                       fontWeight={400}
                                       fontSize={{ base: "12px", md: "14px" }}
                                       lineHeight="160%"
@@ -40,7 +39,6 @@ import React from "react";
 
                           {description && (
                               <Text
-                                  fontFamily="Inter"
                                   fontWeight={400}
                                   fontSize={{ base: "10px", md: "12px" }}
                                   lineHeight="160%"

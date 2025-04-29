@@ -21,8 +21,8 @@ const ProductCard = ({ hasSourceButton = false }) => {
     return (
         <VStack
             bg="white"
-            p={3}
-            borderRadius="lg"
+            p={4}
+            borderRadius="24px"
             alignItems="flex-start"
             justifyContent="space-between"
             height={{ base: "280px", md: "320px", lg: "380px" }}
@@ -35,18 +35,34 @@ const ProductCard = ({ hasSourceButton = false }) => {
         >
             <Box
                 width="100%"
-                borderRadius="xl"
+                borderRadius="20px"
                 height="60%"
                 overflow="hidden"
                 position="relative"
                 mb={2}
             >
+                <Box
+                    position="absolute"
+                    top="12px"
+                    left="12px"
+                    bg="#85858533"
+                    backdropFilter="blur(8px)"
+                    borderRadius="8px"
+                    px={2}
+                    py={1}
+                    fontSize="14px"
+                    fontWeight={500}
+                    zIndex="1"
+                >
+                    <Text >Status</Text>
+                </Box>
                 <Image
                     src={Image1}
                     width="100%"
                     height="100%"
                     objectFit="cover"
                     transition="transform 0.3s"
+                    align="center"
                     _hover={{
                         transform: "scale(1.05)"
                     }}
@@ -55,7 +71,7 @@ const ProductCard = ({ hasSourceButton = false }) => {
 
             <Box width="100%" mb={2}>
                 <Text
-                    fontSize={{ base: "xs", sm: "sm", md: "md" }}
+                    fontSize={{ base: "xs", sm: "sm", md: "16px" }}
                     fontWeight={500}
                     noOfLines={1}
                     overflow="hidden"
@@ -67,7 +83,7 @@ const ProductCard = ({ hasSourceButton = false }) => {
                     Product title goes here
                 </Text>
                 <Text
-                    fontSize={{ base: "2xs", sm: "xs" }}
+                    fontSize={{ base: "2xs", sm: "12px" }}
                     fontWeight={400}
                     opacity={0.6}
                     noOfLines={1}
@@ -83,18 +99,20 @@ const ProductCard = ({ hasSourceButton = false }) => {
             {hasSourceButton ? (
                 <Flex width="100%" alignItems="center" justifyContent="space-between" mt="auto">
                     <Box
-                        width="60%"
-                        bg="purple.600"
-                        borderRadius="md"
-                        py={1}
-                        px={2}
+                        width="107px"
+                        height="34px"
+                        bg="#6F6CF3"
+                        borderRadius="10px"
                         cursor="pointer"
                         transition="background 0.2s"
-                        _hover={{ bg: "purple.800" }}
+                        _hover={{ bg: "purple.600" }}
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
                     >
                         <Text
                             color="white"
-                            fontSize={{ base: "2xs", sm: "xs" }}
+                            fontSize={{ base: "2xs", sm: "14px" }}
                             noOfLines={1}
                             textAlign="center"
                         >
@@ -102,18 +120,20 @@ const ProductCard = ({ hasSourceButton = false }) => {
                         </Text>
                     </Box>
                     <Box
-                        width="35%"
+                        width="72px"
+                        height="26px"
                         bg="black"
-                        borderRadius="md"
-                        py={1}
-                        px={2}
+                        borderRadius="10px"
                         cursor="pointer"
                         transition="background 0.2s"
                         _hover={{ bg: "gray.800" }}
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
                     >
                         <Text
                             color="white"
-                            fontSize={{ base: "2xs", sm: "xs" }}
+                            fontSize={{ base: "2xs", sm: "14px" }}
                             noOfLines={1}
                             textAlign="center"
                         >
@@ -123,19 +143,21 @@ const ProductCard = ({ hasSourceButton = false }) => {
                 </Flex>
             ) : (
                 <Box
-                    width="60%"
-                    bg="purple.600"
-                    borderRadius="md"
-                    py={1}
-                    px={2}
+                    width="107px"
+                    height="34px"
+                    bg="#6F6CF3"
+                    borderRadius="10px"
                     cursor="pointer"
                     transition="background 0.2s"
-                    _hover={{ bg: "purple.800" }}
+                    _hover={{ bg: "purple.600" }}
                     mt="auto"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
                 >
                     <Text
                         color="white"
-                        fontSize={{ base: "2xs", sm: "xs" }}
+                        fontSize={{ base: "2xs", sm: "14px" }}
                         noOfLines={1}
                         textAlign="center"
                     >
@@ -147,7 +169,7 @@ const ProductCard = ({ hasSourceButton = false }) => {
     );
 };
 
-// 视图切换按钮组件
+
 const ViewToggleButton = ({ isActive, label, onClick }) => {
     return (
         <Button
@@ -178,7 +200,6 @@ const MainContent = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    // 检测当前视图
     const isGridView = location.pathname.includes('/grid');
     const isListView = location.pathname.includes('/list');
 
@@ -192,29 +213,47 @@ const MainContent = () => {
                 mb={{ base: 4, md: 6 }}
                 pt={{ base: 2, md: 0 }}
             >
-                <Text
-                    fontWeight="medium"
-                    fontSize={{ base: "md", md: "lg" }}
-                    color="black"
-                >
+                <Text fontWeight="medium" fontSize={{ base: "md", md: "lg" }} color="black">
                     Product List
                 </Text>
 
-                <Flex
-                    align="center"
-                    flexWrap="wrap"
-                    gap={2}
-                >
-                    <ViewToggleButton
-                        isActive={isGridView}
-                        label="Grid View"
-                        onClick={() => navigate('/dashboard/reviews/grid')}
-                    />
-                    <ViewToggleButton
-                        isActive={isListView}
-                        label="List View"
-                        onClick={() => navigate('/dashboard/reviews/list')}
-                    />
+                <Flex align="center" flexWrap="wrap" gap={2}>
+                    <Button
+                        size="sm"
+                        onClick={() => navigate("/dashboard/reviews/grid")}
+                        bg={isGridView ? "black" : "white"}
+                        color={isGridView ? "white" : "black"}
+                        borderRadius="md"
+                        fontWeight="medium"
+                        height="40px"
+                        Width="110px"
+                        minWidth="80px"
+                        _hover={{
+                            bg: isGridView ? "gray.800" : "gray.100",
+                            transform: "translateY(-2px)",
+                            boxShadow: "sm",
+                        }}
+                    >
+                        Grid View
+                    </Button>
+                    <Button
+                        size="sm"
+                        onClick={() => navigate("/dashboard/reviews/list")}
+                        bg={isListView ? "black" : "white"}
+                        color={isListView ? "white" : "black"}
+                        borderRadius="md"
+                        fontWeight="medium"
+                        height="40px"
+                        Width="110px"
+                        minWidth="80px"
+                        _hover={{
+                            bg: isListView ? "gray.800" : "gray.100",
+                            transform: "translateY(-2px)",
+                            boxShadow: "sm",
+                        }}
+                    >
+                        List View
+                    </Button>
                 </Flex>
             </Flex>
 
@@ -242,8 +281,6 @@ const MainContent = () => {
 
 export default function Productgrid() {
     return (
-        <LayoutWrapper>
-            <MainContent/>
-        </LayoutWrapper>
+        <MainContent/>
     );
 }

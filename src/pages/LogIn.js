@@ -104,6 +104,7 @@ export function LogIn() {
                             </Text>
                             <Input
                                 type="email"
+                                color="black"
                                 placeholder="your@email.com"
                                 size="md"
                                 value={email}
@@ -120,6 +121,7 @@ export function LogIn() {
                             <Input
                                 type="password"
                                 placeholder="••••••••"
+                                color="black"
                                 size="md"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}

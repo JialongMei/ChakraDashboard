@@ -37,6 +37,31 @@ import {
 } from "recharts";
 import {useState} from "react";
 
+const UserIcon = createIcon({
+    displayName: "UserIcon",
+    viewBox: "0 0 20 20",
+    path: (
+        <>
+            <path
+                d="M9.99999 9.99996C12.3012 9.99996 14.1667 8.13448 14.1667 5.83329C14.1667 3.53211 12.3012 1.66663 9.99999 1.66663C7.69881 1.66663 5.83333 3.53211 5.83333 5.83329C5.83333 8.13448 7.69881 9.99996 9.99999 9.99996Z"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                fill="none"
+            />
+            <path
+                d="M17.1583 18.3333C17.1583 15.1083 13.95 12.5 10 12.5C6.05001 12.5 2.84167 15.1083 2.84167 18.3333"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                fill="none"
+            />
+        </>
+    ),
+});
+
 const MainContent = () => {
     return (
         <Box>
@@ -56,9 +81,9 @@ const MainContent = () => {
                     gap={2}
                 >
                     <Text fontSize="sm" mr={2} color="black" opacity={0.6}>Choose Platform:</Text>
-                    <Button size="sm" mr={2} color="black" _hover={{ bg: "gray.100" }}>Alibaba</Button>
-                    <Button size="sm" mr={2} color="black" _hover={{ bg: "gray.100" }}>AliExpress</Button>
-                    <Button size="sm" bg="purple.500" color="white" _hover={{ bg: "purple" }}>All</Button>
+                    <Button size="sm" mr={2} color="black" _hover={{ bg: "gray.100" }} borderRadius="10px">Alibaba</Button>
+                    <Button size="sm" mr={2} color="black" _hover={{ bg: "gray.100" }} borderRadius="10px">AliExpress</Button>
+                    <Button size="sm" bg="#6F6CF3" color="white" _hover={{ bg: "purple" }} borderRadius="10px">All</Button>
                 </Flex>
             </Flex>
 
@@ -69,7 +94,7 @@ const MainContent = () => {
                 mt={{ base: 0, md: 2 }}
                 px={{ base: 2, md: 0 }}
             >
-                <Box bg="white" p={{ base: 3, md: 4 }} borderRadius="lg">
+                <Box bg="white" p={{ base: 3, md: 4 }} borderRadius="24px">
                     <Box
                         width="100%"
                         height="auto"
@@ -84,7 +109,6 @@ const MainContent = () => {
                         >
                             <Icon as={Chart_square} mr={2} boxSize={{ base: "16px", md: "18px" }} />
                             <Text
-                                fontFamily="Inter"
                                 fontWeight={400}
                                 fontSize={{ base: "12px", md: "14px" }}
                                 lineHeight="160%"
@@ -99,7 +123,6 @@ const MainContent = () => {
                         </Box>
 
                         <Text
-                            fontFamily="Inter"
                             fontWeight={400}
                             fontSize={{ base: "10px", md: "12px" }}
                             lineHeight="160%"
@@ -111,7 +134,7 @@ const MainContent = () => {
                         </Text>
                     </Box>
                 </Box>
-                <Box bg="white" p={{ base: 3, md: 4 }} borderRadius="lg">
+                <Box bg="white" p={{ base: 3, md: 4 }} borderRadius="24px">
                     <Box
                         width="100%"
                         height="auto"
@@ -126,7 +149,6 @@ const MainContent = () => {
                         >
                             <Icon as={Coin} mr={2} boxSize={{ base: "16px", md: "18px" }} />
                             <Text
-                                fontFamily="Inter"
                                 fontWeight={400}
                                 fontSize={{ base: "12px", md: "14px" }}
                                 lineHeight="160%"
@@ -141,7 +163,6 @@ const MainContent = () => {
                         </Box>
 
                         <Text
-                            fontFamily="Inter"
                             fontWeight={400}
                             fontSize={{ base: "10px", md: "12px" }}
                             lineHeight="160%"
@@ -153,7 +174,7 @@ const MainContent = () => {
                         </Text>
                     </Box>
                 </Box>
-                <Box bg="white" p={{ base: 3, md: 4 }} borderRadius="lg">
+                <Box bg="white" p={{ base: 3, md: 4 }} borderRadius="24px">
                     <Box
                         width="100%"
                         height="auto"
@@ -168,7 +189,6 @@ const MainContent = () => {
                         >
                             <Icon as={Message_notif} mr={2} boxSize={{ base: "16px", md: "18px" }} />
                             <Text
-                                fontFamily="Inter"
                                 fontWeight={400}
                                 fontSize={{ base: "12px", md: "14px" }}
                                 lineHeight="160%"
@@ -189,7 +209,6 @@ const MainContent = () => {
                                     <Notices_num  style={{ maxWidth: '100%', height: 'auto' }} />
                                 </Box>
                                 <Text
-                                    fontFamily="Inter"
                                     fontWeight={400}
                                     fontSize={{ base: "10px", md: "12px" }}
                                     lineHeight="160%"
@@ -247,7 +266,7 @@ const MainContent = () => {
                     <Box
                         bg="white"
                         p={{ base: 1, sm: 2, md: 4 }}
-                        borderRadius="lg"
+                        borderRadius="24px"
                         height={{ base: "auto", md: "310px" }}
                         minHeight={{ base: "250px", md: "310px" }}
                     >
@@ -274,17 +293,17 @@ const MainContent = () => {
                                     flexWrap={{ base: "nowrap", md: "wrap" }}
                                 >
                                     <Box display="inline-flex" alignItems="center" mr={{ base: 0, sm: 4 }} mb={{ base: 1, sm: 0 }}>
-                                        <Box as="span" w="8px" h="8px" borderRadius="50%" bg="#A5E8E0" mr={2}></Box>
+                                        <Box as="span" w="8px" h="8px" borderRadius="50%" bg="#D7F0FC" mr={2}></Box>
                                         <Text fontSize={{ base: "10px", md: "12px" }} fontWeight={600} color="#000000">Listings Removed</Text>
                                     </Box>
 
                                     <Box display="inline-flex" alignItems="center" mr={{ base: 0, sm: 4 }} mb={{ base: 1, sm: 0 }}>
-                                        <Box as="span" w="8px" h="8px" borderRadius="50%" bg="#8CD4FF" mr={2}></Box>
+                                        <Box as="span" w="8px" h="8px" borderRadius="50%" bg="#CDEFD9" mr={2}></Box>
                                         <Text fontSize={{ base: "10px", md: "12px" }} fontWeight={600} color="#000000">Notices Sent</Text>
                                     </Box>
 
                                     <Box display="inline-flex" alignItems="center">
-                                        <Box as="span" w="8px" h="8px" borderRadius="50%" bg="#FFA5A5" mr={2}></Box>
+                                        <Box as="span" w="8px" h="8px" borderRadius="50%" bg="#FEA4A3" mr={2}></Box>
                                         <Text fontSize={{ base: "10px", md: "12px" }} fontWeight={600} color="#000000">Notices Rejected</Text>
                                     </Box>
                                 </Flex>
@@ -297,7 +316,7 @@ const MainContent = () => {
                                             { month: "Feb", listingsRemoved: 5000, noticesSent: 700, noticesRejected: 900 },
                                             { month: "Mar", listingsRemoved: 5200, noticesSent: 750, noticesRejected: 850 },
                                             { month: "Apr", listingsRemoved: 4200, noticesSent: 650, noticesRejected: 800 },
-                                            { month: "May", listingsRemoved: 4500, noticesSent: 600, noticesRejected: 700 },
+                                            { month: "May", listingsRemoved: 5000, noticesSent: 600, noticesRejected: 700 },
                                             { month: "Jun", listingsRemoved: 5100, noticesSent: 700, noticesRejected: 500 },
                                             { month: "Jul", listingsRemoved: 6000, noticesSent: 800, noticesRejected: 900 },
                                             { month: "Aug", listingsRemoved: 5800, noticesSent: 750, noticesRejected: 400 },
@@ -324,32 +343,33 @@ const MainContent = () => {
                                         <YAxis
                                             axisLine={false}
                                             tickLine={false}
-                                            tick={{ fill: '#999', fontSize: 10 }}
-                                            tickCount={5}
+                                            tick={{ fontSize: "14px", fill: "#999" }}
+                                            tickCount={7}
                                             domain={[0, 6000]}
                                             width={30}
+                                            interval={0}
+                                            tickFormatter={(value) => {
+                                                return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                            }}
                                         />
                                         <Tooltip />
                                         <Bar
                                             dataKey="listingsRemoved"
                                             name="Listings Removed"
                                             fill="#D7F0FC"
-                                            barSize={16}
-                                            radius={[4, 4, 0, 0]}
+                                            barSize={6}
                                         />
                                         <Bar
                                             dataKey="noticesSent"
                                             name="Notices Sent"
                                             fill="#CDEFD9"
-                                            barSize={16}
-                                            radius={[4, 4, 0, 0]}
+                                            barSize={6}
                                         />
                                         <Bar
                                             dataKey="noticesRejected"
                                             name="Notices Rejected"
                                             fill="#FEA4A3"
-                                            barSize={16}
-                                            radius={[4, 4, 0, 0]}
+                                            barSize={6}
                                         />
                                     </BarChart>
                                 </ResponsiveContainer>
@@ -361,7 +381,7 @@ const MainContent = () => {
                     <Box
                         bg="white"
                         p={{ base: 1, sm: 2, md: 4 }}
-                        borderRadius="lg"
+                        borderRadius="24px"
                         height={{ base: "auto", md: "310px" }}
                         overflow="hidden"
                         _hover={{
@@ -377,10 +397,12 @@ const MainContent = () => {
                             },
                         }}
                     >
+                        {/* Modified header with consistent padding */}
                         <Flex
                             justifyContent="space-between"
                             alignItems="center"
                             mb={2}
+                            px="24px" /* 24px left and right padding */
                         >
                             <Text
                                 color="#000000"
@@ -398,299 +420,302 @@ const MainContent = () => {
                             </Text>
                         </Flex>
 
-                        {/* First seller */}
-                        <Flex
-                            alignItems="center"
-                            justifyContent="space-between"
-                            bg="white"
-                            p={1}
-                            borderRadius="md"
-                            width="100%"
-                            flexWrap="wrap"
-                            mb={1}
-                        >
+                        {/* Content area with left padding of 24px */}
+                        <Box pl={6} pr={6}> {/* 24px left padding */}
+                            {/* First seller */}
                             <Flex
                                 alignItems="center"
-                                mb={{ base: 1, sm: 0 }}
-                                flex={{ base: "1 0 100%", sm: "1" }}
+                                justifyContent="space-between"
+                                bg="white"
+                                p={1}
+                                borderRadius="md"
+                                width="100%"
+                                flexWrap="wrap"
+                                mb={1}
                             >
-                                <Box
-                                    bg="#E4F5D1"
-                                    borderRadius="full"
-                                    width={{ base: "28px", md: "32px" }}
-                                    height={{ base: "28px", md: "32px" }}
-                                    display="flex"
+                                <Flex
                                     alignItems="center"
-                                    justifyContent="center"
-                                    mr={3}
+                                    mb={{ base: 1, sm: 0 }}
+                                    flex={{ base: "1 0 100%", sm: "1" }}
+                                >
+                                    <Box
+                                        bg="#E4F5D1"
+                                        borderRadius="10px"
+                                        width={{ base: "28px", md: "36px" }}
+                                        height={{ base: "28px", md: "36px" }}
+                                        display="flex"
+                                        alignItems="center"
+                                        justifyContent="center"
+                                        mr={3}
+                                        flexShrink={0}
+                                    >
+                                        <UserIcon color="#85BA49" boxSize={{ base: 3, md: 4 }} />
+                                    </Box>
+                                    <Box minWidth="0">
+                                        <Text
+                                            fontSize={{ base: "10px", md: "12px" }}
+                                            fontWeight="medium"
+                                            color="#161819"
+                                            isTruncated
+                                        >
+                                            Rose Meadows
+                                        </Text>
+                                        <Text
+                                            fontSize={{ base: "10px", md: "12px" }}
+                                            color="#161819"
+                                            opacity="50%"
+                                            isTruncated
+                                        >
+                                            Company name
+                                        </Text>
+                                    </Box>
+                                </Flex>
+                                <Text
+                                    fontSize={{ base: "10px", md: "12px" }}
+                                    color="#161819"
+                                    opacity="50%"
+                                    ml={{ base: 0, sm: 2 }}
                                     flexShrink={0}
                                 >
-                                    <Icon as={Linear_user} color="#E4F5D1" boxSize={{ base: 3, md: 4 }} />
-                                </Box>
-                                <Box minWidth="0">
-                                    <Text
-                                        fontSize={{ base: "10px", md: "12px" }}
-                                        fontWeight="medium"
-                                        color="#161819"
-                                        isTruncated
-                                    >
-                                        Rose Meadows
-                                    </Text>
-                                    <Text
-                                        fontSize={{ base: "10px", md: "12px" }}
-                                        color="#161819"
-                                        opacity="50%"
-                                        isTruncated
-                                    >
-                                        Company name
-                                    </Text>
-                                </Box>
+                                    Listing #6345
+                                </Text>
                             </Flex>
-                            <Text
-                                fontSize={{ base: "10px", md: "12px" }}
-                                color="#161819"
-                                opacity="50%"
-                                ml={{ base: 0, sm: 2 }}
-                                flexShrink={0}
-                            >
-                                Listing #6345
-                            </Text>
-                        </Flex>
 
-                        {/* Second seller */}
-                        <Flex
-                            alignItems="center"
-                            justifyContent="space-between"
-                            bg="white"
-                            p={1}
-                            borderRadius="md"
-                            width="100%"
-                            flexWrap="wrap"
-                            mb={1}
-                        >
+                            {/* Second seller */}
                             <Flex
                                 alignItems="center"
-                                mb={{ base: 1, sm: 0 }}
-                                flex={{ base: "1 0 100%", sm: "1" }}
+                                justifyContent="space-between"
+                                bg="white"
+                                p={1}
+                                borderRadius="md"
+                                width="100%"
+                                flexWrap="wrap"
+                                mb={1}
                             >
-                                <Box
-                                    bg="#FEE8EA"
-                                    borderRadius="full"
-                                    width={{ base: "28px", md: "32px" }}
-                                    height={{ base: "28px", md: "32px" }}
-                                    display="flex"
+                                <Flex
                                     alignItems="center"
-                                    justifyContent="center"
-                                    mr={3}
+                                    mb={{ base: 1, sm: 0 }}
+                                    flex={{ base: "1 0 100%", sm: "1" }}
+                                >
+                                    <Box
+                                        bg="#FEE8EA"
+                                        borderRadius="10px"
+                                        width={{ base: "28px", md: "36px" }}
+                                        height={{ base: "28px", md: "36px" }}
+                                        display="flex"
+                                        alignItems="center"
+                                        justifyContent="center"
+                                        mr={3}
+                                        flexShrink={0}
+                                    >
+                                        <UserIcon color="#DA3F51" boxSize={{ base: 3, md: 4 }} />
+                                    </Box>
+                                    <Box minWidth="0">
+                                        <Text
+                                            fontSize={{ base: "10px", md: "12px" }}
+                                            fontWeight="medium"
+                                            color="#161819"
+                                            isTruncated
+                                        >
+                                            Madden Esparza
+                                        </Text>
+                                        <Text
+                                            fontSize={{ base: "10px", md: "12px" }}
+                                            color="#161819"
+                                            opacity="50%"
+                                            isTruncated
+                                        >
+                                            Company name
+                                        </Text>
+                                    </Box>
+                                </Flex>
+                                <Text
+                                    fontSize={{ base: "10px", md: "12px" }}
+                                    color="#161819"
+                                    opacity="50%"
+                                    ml={{ base: 0, sm: 2 }}
                                     flexShrink={0}
                                 >
-                                    <Icon as={Linear_user} color="#FEE8EA" boxSize={{ base: 3, md: 4 }} />
-                                </Box>
-                                <Box minWidth="0">
-                                    <Text
-                                        fontSize={{ base: "10px", md: "12px" }}
-                                        fontWeight="medium"
-                                        color="#161819"
-                                        isTruncated
-                                    >
-                                        Madden Esparza
-                                    </Text>
-                                    <Text
-                                        fontSize={{ base: "10px", md: "12px" }}
-                                        color="#161819"
-                                        opacity="50%"
-                                        isTruncated
-                                    >
-                                        Company name
-                                    </Text>
-                                </Box>
+                                    Listing #6345
+                                </Text>
                             </Flex>
-                            <Text
-                                fontSize={{ base: "10px", md: "12px" }}
-                                color="#161819"
-                                opacity="50%"
-                                ml={{ base: 0, sm: 2 }}
-                                flexShrink={0}
-                            >
-                                Listing #6345
-                            </Text>
-                        </Flex>
 
-                        {/* Third seller */}
-                        <Flex
-                            alignItems="center"
-                            justifyContent="space-between"
-                            bg="white"
-                            p={1}
-                            borderRadius="md"
-                            width="100%"
-                            flexWrap="wrap"
-                            mb={1}
-                        >
+                            {/* Third seller */}
                             <Flex
                                 alignItems="center"
-                                mb={{ base: 1, sm: 0 }}
-                                flex={{ base: "1 0 100%", sm: "1" }}
+                                justifyContent="space-between"
+                                bg="white"
+                                p={1}
+                                borderRadius="md"
+                                width="100%"
+                                flexWrap="wrap"
+                                mb={1}
                             >
-                                <Box
-                                    bg="#FCEEFF"
-                                    borderRadius="full"
-                                    width={{ base: "28px", md: "32px" }}
-                                    height={{ base: "28px", md: "32px" }}
-                                    display="flex"
+                                <Flex
                                     alignItems="center"
-                                    justifyContent="center"
-                                    mr={3}
+                                    mb={{ base: 1, sm: 0 }}
+                                    flex={{ base: "1 0 100%", sm: "1" }}
+                                >
+                                    <Box
+                                        bg="#FCEEFF"
+                                        borderRadius="10px"
+                                        width={{ base: "28px", md: "36px" }}
+                                        height={{ base: "28px", md: "36px" }}
+                                        display="flex"
+                                        alignItems="center"
+                                        justifyContent="center"
+                                        mr={3}
+                                        flexShrink={0}
+                                    >
+                                        <UserIcon color="#C84EE1" boxSize={{ base: 3, md: 4 }} />
+                                    </Box>
+                                    <Box minWidth="0">
+                                        <Text
+                                            fontSize={{ base: "10px", md: "12px" }}
+                                            fontWeight="medium"
+                                            color="#161819"
+                                            isTruncated
+                                        >
+                                            Rose Meadows
+                                        </Text>
+                                        <Text
+                                            fontSize={{ base: "10px", md: "12px" }}
+                                            color="#161819"
+                                            opacity="50%"
+                                            isTruncated
+                                        >
+                                            Company name
+                                        </Text>
+                                    </Box>
+                                </Flex>
+                                <Text
+                                    fontSize={{ base: "10px", md: "12px" }}
+                                    color="#161819"
+                                    opacity="50%"
+                                    ml={{ base: 0, sm: 2 }}
                                     flexShrink={0}
                                 >
-                                    <Icon as={Linear_user} color="#FCEEFF" boxSize={{ base: 3, md: 4 }} />
-                                </Box>
-                                <Box minWidth="0">
-                                    <Text
-                                        fontSize={{ base: "10px", md: "12px" }}
-                                        fontWeight="medium"
-                                        color="#161819"
-                                        isTruncated
-                                    >
-                                        Rose Meadows
-                                    </Text>
-                                    <Text
-                                        fontSize={{ base: "10px", md: "12px" }}
-                                        color="#161819"
-                                        opacity="50%"
-                                        isTruncated
-                                    >
-                                        Company name
-                                    </Text>
-                                </Box>
+                                    Listing #6345
+                                </Text>
                             </Flex>
-                            <Text
-                                fontSize={{ base: "10px", md: "12px" }}
-                                color="#161819"
-                                opacity="50%"
-                                ml={{ base: 0, sm: 2 }}
-                                flexShrink={0}
-                            >
-                                Listing #6345
-                            </Text>
-                        </Flex>
 
-                        {/* Fourth seller */}
-                        <Flex
-                            alignItems="center"
-                            justifyContent="space-between"
-                            bg="white"
-                            p={1}
-                            borderRadius="md"
-                            width="100%"
-                            flexWrap="wrap"
-                            mb={1}
-                        >
+                            {/* Fourth seller */}
                             <Flex
                                 alignItems="center"
-                                mb={{ base: 1, sm: 0 }}
-                                flex={{ base: "1 0 100%", sm: "1" }}
+                                justifyContent="space-between"
+                                bg="white"
+                                p={1}
+                                borderRadius="md"
+                                width="100%"
+                                flexWrap="wrap"
+                                mb={1}
                             >
-                                <Box
-                                    bg="lightblue"
-                                    borderRadius="full"
-                                    width={{ base: "28px", md: "32px" }}
-                                    height={{ base: "28px", md: "32px" }}
-                                    display="flex"
+                                <Flex
                                     alignItems="center"
-                                    justifyContent="center"
-                                    mr={3}
+                                    mb={{ base: 1, sm: 0 }}
+                                    flex={{ base: "1 0 100%", sm: "1" }}
+                                >
+                                    <Box
+                                        bg="#EBEFFB"
+                                        borderRadius="10px"
+                                        width={{ base: "28px", md: "36px" }}
+                                        height={{ base: "28px", md: "36px" }}
+                                        display="flex"
+                                        alignItems="center"
+                                        justifyContent="center"
+                                        mr={3}
+                                        flexShrink={0}
+                                    >
+                                        <UserIcon color="#395CCB" boxSize={{ base: 3, md: 4 }} />
+                                    </Box>
+                                    <Box minWidth="0">
+                                        <Text
+                                            fontSize={{ base: "10px", md: "12px" }}
+                                            fontWeight="medium"
+                                            color="#161819"
+                                            isTruncated
+                                        >
+                                            Rose Meadows
+                                        </Text>
+                                        <Text
+                                            fontSize={{ base: "10px", md: "12px" }}
+                                            color="#161819"
+                                            opacity="50%"
+                                            isTruncated
+                                        >
+                                            Company name
+                                        </Text>
+                                    </Box>
+                                </Flex>
+                                <Text
+                                    fontSize={{ base: "10px", md: "12px" }}
+                                    color="#161819"
+                                    opacity="50%"
+                                    ml={{ base: 0, sm: 2 }}
                                     flexShrink={0}
                                 >
-                                    <Icon as={Linear_user} color="white" boxSize={{ base: 3, md: 4 }} />
-                                </Box>
-                                <Box minWidth="0">
-                                    <Text
-                                        fontSize={{ base: "10px", md: "12px" }}
-                                        fontWeight="medium"
-                                        color="#161819"
-                                        isTruncated
-                                    >
-                                        Rose Meadows
-                                    </Text>
-                                    <Text
-                                        fontSize={{ base: "10px", md: "12px" }}
-                                        color="#161819"
-                                        opacity="50%"
-                                        isTruncated
-                                    >
-                                        Company name
-                                    </Text>
-                                </Box>
+                                    Listing #6345
+                                </Text>
                             </Flex>
-                            <Text
-                                fontSize={{ base: "10px", md: "12px" }}
-                                color="#161819"
-                                opacity="50%"
-                                ml={{ base: 0, sm: 2 }}
-                                flexShrink={0}
-                            >
-                                Listing #6345
-                            </Text>
-                        </Flex>
 
-                        <Flex
-                            alignItems="center"
-                            justifyContent="space-between"
-                            bg="white"
-                            p={1}
-                            borderRadius="md"
-                            width="100%"
-                            flexWrap="wrap"
-                            mb={1}
-                        >
                             <Flex
                                 alignItems="center"
-                                mb={{ base: 1, sm: 0 }}
-                                flex={{ base: "1 0 100%", sm: "1" }}
+                                justifyContent="space-between"
+                                bg="white"
+                                p={1}
+                                borderRadius="md"
+                                width="100%"
+                                flexWrap="wrap"
+                                mb={1}
                             >
-                                <Box
-                                    bg="lightblue"
-                                    borderRadius="full"
-                                    width={{ base: "28px", md: "32px" }}
-                                    height={{ base: "28px", md: "32px" }}
-                                    display="flex"
+                                <Flex
                                     alignItems="center"
-                                    justifyContent="center"
-                                    mr={3}
+                                    mb={{ base: 1, sm: 0 }}
+                                    flex={{ base: "1 0 100%", sm: "1" }}
+                                >
+                                    <Box
+                                        bg="#F8F1E7"
+                                        borderRadius="10px"
+                                        width={{ base: "28px", md: "36px" }}
+                                        height={{ base: "28px", md: "36px" }}
+                                        display="flex"
+                                        alignItems="center"
+                                        justifyContent="center"
+                                        mr={3}
+                                        flexShrink={0}
+                                    >
+                                        <UserIcon color="#BB9021" boxSize={{ base: 3, md: 4 }} />
+                                    </Box>
+                                    <Box minWidth="0">
+                                        <Text
+                                            fontSize={{ base: "10px", md: "12px" }}
+                                            fontWeight="medium"
+                                            color="#161819"
+                                            isTruncated
+                                        >
+                                            Rose Meadows
+                                        </Text>
+                                        <Text
+                                            fontSize={{ base: "10px", md: "12px" }}
+                                            color="#161819"
+                                            opacity="50%"
+                                            isTruncated
+                                        >
+                                            Company name
+                                        </Text>
+                                    </Box>
+                                </Flex>
+                                <Text
+                                    fontSize={{ base: "10px", md: "12px" }}
+                                    color="#161819"
+                                    opacity="50%"
+                                    ml={{ base: 0, sm: 2 }}
                                     flexShrink={0}
                                 >
-                                    <Icon as={Linear_user} color="white" boxSize={{ base: 3, md: 4 }} />
-                                </Box>
-                                <Box minWidth="0">
-                                    <Text
-                                        fontSize={{ base: "10px", md: "12px" }}
-                                        fontWeight="medium"
-                                        color="#161819"
-                                        isTruncated
-                                    >
-                                        Rose Meadows
-                                    </Text>
-                                    <Text
-                                        fontSize={{ base: "10px", md: "12px" }}
-                                        color="#161819"
-                                        opacity="50%"
-                                        isTruncated
-                                    >
-                                        Company name
-                                    </Text>
-                                </Box>
+                                    Listing #6345
+                                </Text>
                             </Flex>
-                            <Text
-                                fontSize={{ base: "10px", md: "12px" }}
-                                color="#161819"
-                                opacity="50%"
-                                ml={{ base: 0, sm: 2 }}
-                                flexShrink={0}
-                            >
-                                Listing #6345
-                            </Text>
-                        </Flex>
+                        </Box>
                     </Box>
                 </GridItem>
             </SimpleGrid>
@@ -699,7 +724,7 @@ const MainContent = () => {
                     <Box
                         bg="white"
                         p={{ base: 1, sm: 2, md: 4 }}
-                        borderRadius="lg"
+                        borderRadius="24px"
                         height="100%"
                     >
                         <Box width="100%" height="100%">
@@ -742,7 +767,6 @@ const MainContent = () => {
                                     gap={{ base: 1, md: 0 }}
                                 >
                                     <Text
-                                        fontFamily="Inter"
                                         fontWeight={400}
                                         fontSize={{ base: "12px", md: "14px" }}
                                         lineHeight="160%"
@@ -754,7 +778,6 @@ const MainContent = () => {
                                         Mademoiselle 3.4fl.oz 100 ml perfume, CHANEL
                                     </Text>
                                     <Text
-                                        fontFamily="Inter"
                                         fontWeight={400}
                                         fontSize={{ base: "11px", md: "12px" }}
                                         lineHeight="160%"
@@ -767,7 +790,6 @@ const MainContent = () => {
                                     </Text>
                                 </Flex>
                                 <Text
-                                    fontFamily="Inter"
                                     fontWeight={400}
                                     fontSize={{ base: "11px", md: "12px" }}
                                     lineHeight="160%"
@@ -799,7 +821,6 @@ const MainContent = () => {
                                     gap={{ base: 1, md: 0 }}
                                 >
                                     <Text
-                                        fontFamily="Inter"
                                         fontWeight={400}
                                         fontSize={{ base: "12px", md: "14px" }}
                                         lineHeight="160%"
@@ -811,7 +832,6 @@ const MainContent = () => {
                                         Cigarettes Crush balls Aroma, BLUE
                                     </Text>
                                     <Text
-                                        fontFamily="Inter"
                                         fontWeight={400}
                                         fontSize={{ base: "11px", md: "12px" }}
                                         lineHeight="160%"
@@ -824,7 +844,6 @@ const MainContent = () => {
                                     </Text>
                                 </Flex>
                                 <Text
-                                    fontFamily="Inter"
                                     fontWeight={400}
                                     fontSize={{ base: "11px", md: "12px" }}
                                     lineHeight="160%"
@@ -855,7 +874,6 @@ const MainContent = () => {
                                     gap={{ base: 1, md: 0 }}
                                 >
                                     <Text
-                                        fontFamily="Inter"
                                         fontWeight={400}
                                         fontSize={{ base: "12px", md: "14px" }}
                                         lineHeight="160%"
@@ -867,7 +885,6 @@ const MainContent = () => {
                                         Cigarettes Crush balls Aroma, BLUE
                                     </Text>
                                     <Text
-                                        fontFamily="Inter"
                                         fontWeight={400}
                                         fontSize={{ base: "11px", md: "12px" }}
                                         lineHeight="160%"
@@ -880,7 +897,6 @@ const MainContent = () => {
                                     </Text>
                                 </Flex>
                                 <Text
-                                    fontFamily="Inter"
                                     fontWeight={400}
                                     fontSize={{ base: "11px", md: "12px" }}
                                     lineHeight="160%"
@@ -912,7 +928,6 @@ const MainContent = () => {
                                     gap={{ base: 1, md: 0 }}
                                 >
                                     <Text
-                                        fontFamily="Inter"
                                         fontWeight={400}
                                         fontSize={{ base: "12px", md: "14px" }}
                                         lineHeight="160%"
@@ -924,7 +939,6 @@ const MainContent = () => {
                                         Cigarettes Crush balls Aroma, BLUE
                                     </Text>
                                     <Text
-                                        fontFamily="Inter"
                                         fontWeight={400}
                                         fontSize={{ base: "11px", md: "12px" }}
                                         lineHeight="160%"
@@ -937,7 +951,6 @@ const MainContent = () => {
                                     </Text>
                                 </Flex>
                                 <Text
-                                    fontFamily="Inter"
                                     fontWeight={400}
                                     fontSize={{ base: "11px", md: "12px" }}
                                     lineHeight="160%"
@@ -958,7 +971,7 @@ const MainContent = () => {
                     <Box
                         bg="white"
                         p={{ base: 1, sm: 2, md: 4 }}
-                        borderRadius="lg"
+                        borderRadius="24px"
                         height="100%"
                     >
                         <Flex
@@ -986,7 +999,7 @@ const MainContent = () => {
 
                         <Flex
                             alignItems="center"
-                            justifyContent="center"
+                            justifyContent="flex start"
                             width="100%"
                             flexDirection={{ base: "column", sm: "row" }}
                             gap={{ base: 4, sm: 2, md: 4 }}
@@ -999,11 +1012,13 @@ const MainContent = () => {
                                 maxWidth={{ base: "100%", sm: "40%" }}
                             >
                                 <Box
-                                    width={{ base: "70px", md: "84px" }}
-                                    height={{ base: "70px", md: "84px" }}
+                                    width={{ base: "75px", md: "89px" }}
+                                    height={{ base: "75px", md: "89px" }}
                                     borderRadius="50%"
                                     overflow="hidden"
                                     position="relative"
+                                    borderColor="#F1F1F1"
+                                    borderWidth="5px"
                                 >
                                     <Image
                                         src={profileImage}
@@ -1014,22 +1029,20 @@ const MainContent = () => {
                                     />
                                 </Box>
                                 <Text
-                                    fontFamily="Inter"
                                     fontWeight={500}
                                     fontSize={{ base: "11px", md: "12px" }}
                                     lineHeight="160%"
                                     color="#161819"
-                                    mt={1}
                                 >
                                     Carl Meadows
                                 </Text>
                                 <Text
-                                    fontFamily="Inter"
                                     fontWeight={400}
                                     fontSize={{ base: "9px", md: "10px" }}
                                     lineHeight="160%"
                                     color="#161819"
                                     opacity={0.5}
+                                    mt={-1}
                                 >
                                     Admin
                                 </Text>
@@ -1078,9 +1091,9 @@ const MainContent = () => {
                                             color="#161819"
                                             isTruncated
                                             flexGrow={1}
-                                            textAlign="right"
+                                            textAlign="left"
                                         >
-                                            23353
+                                            23,353
                                         </Text>
                                     </Flex>
                                 </Box>
@@ -1109,14 +1122,12 @@ const MainContent = () => {
                     </Box>
                 </GridItem>
             </SimpleGrid>
-            </Box>
+        </Box>
     );
 }
 
 export default function Dashboard() {
-            return (
-                <LayoutWrapper pageTitle="Dashboard">
-                    <MainContent/>
-                </LayoutWrapper>
-            )
-        }
+    return (
+        <MainContent/>
+    )
+}
