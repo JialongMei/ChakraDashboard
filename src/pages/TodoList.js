@@ -50,13 +50,13 @@ const ListCard = ({title, owner, items, ...props}) => {
         >
             <HStack
                 alignItems="center"
-                width={{base: "100px", sm: "150px", md: "100%"}}
+                width={{base: "50%", sm: "70%", md: "100%"}}
                 ml={isSmallScreen ? 2 : 4}
                 overflow="hidden"
                 display={isMiniView ? "none" : "flex"}
                 height="100%"
             >
-                <Checkbox.Root display="flex" alignItems="center">
+                <Checkbox.Root display="flex" alignItems="center" width={"150px"}>
                     <Checkbox.HiddenInput/>
                     <Checkbox.Control/>
                     <Checkbox.Label>
@@ -90,7 +90,7 @@ const ListCard = ({title, owner, items, ...props}) => {
                             noOfLines={{base: 1, md: 1}}
                             overflow="hidden"
                             textOverflow="ellipsis"
-                            color="gray.500"
+                            color="gray.950"
                             isTruncated
                         >
                             {item}
