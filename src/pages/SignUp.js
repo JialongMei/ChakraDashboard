@@ -10,6 +10,7 @@ import {
     Text,
     VStack,
 } from "@chakra-ui/react";
+import {register as firebaseRegister} from "../useFirebaseAuth";
 
 export default function SignUp() {
     const [status, setStatus] = useState(false)
@@ -19,6 +20,7 @@ export default function SignUp() {
     const [users, setUsers] = useState([])
     const {login} = useAuth()
 
+
     useEffect(() => {
         const storedUsers = localStorage.getItem('users');
         if (storedUsers) {
@@ -26,22 +28,16 @@ export default function SignUp() {
         }
     }, []);
 
-    const handleSignUp = () => {
-        if (email && password) {
-            const newUser = {
-                email: email,
-                password: password,
-            }
-            setUsers([...users, newUser])
-            localStorage.setItem('users', JSON.stringify([...users, newUser]))
-            setStatus(true)
-            setEmail("")
-            setPassword("")
-            login()
-        } else {
-            setError("Please enter a valid email and password")
-        }
+    const handleRegister = async (e) => {
+    e.preventDefault();
+    try {
+      await firebaseRegister(email, password);
+      alert("Account created successfully!");
+      login();
+    } catch (error) {
+      alert(error.message);
     }
+  };
 
     return (
         <Container maxW="100%" p={0} height="100vh" bg="#F7F8FC">
@@ -124,7 +120,7 @@ export default function SignUp() {
                             size="md"
                             width="100%"
                             _hover={{ bg: "#5957d7" }}
-                            onClick={handleSignUp}
+                            onClick={handleRegister}
                             mt={2}
                             height="44px"
                             fontWeight="500"

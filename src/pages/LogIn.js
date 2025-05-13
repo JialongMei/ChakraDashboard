@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import {useState, useEffect} from "react";
+import {useNavigate} from "react-router-dom";
+import {useAuth} from "../context/AuthContext";
 import {
     Box,
     Button,
@@ -12,6 +12,7 @@ import {
     VStack,
     Link,
 } from "@chakra-ui/react";
+import {login as firebaseLogin} from "../useFirebaseAuth";
 
 export function LogIn() {
     const [email, setEmail] = useState("");
@@ -28,26 +29,15 @@ export function LogIn() {
         }
     }, []);
 
-    const handleLogin = () => {
-        setError("");
-
-        if (!email || !password) {
-            setError("Please enter a valid email and password");
-            return;
-        }
-
-        const user = users.find(
-            (user) => user.email === email && user.password === password
-        );
-
-        if (user) {
-            login();
-            setEmail("");
-            setPassword("");
-            localStorage.setItem("currentUser", JSON.stringify(user));
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        try {
+            await firebaseLogin(email, password);
+            alert("Login successful");
+            login(); // Update authentication state using context
             navigate("/dashboard");
-        } else {
-            setError("Invalid email or password");
+        } catch (error) {
+            setError(error.message);
         }
     };
 
@@ -63,7 +53,7 @@ export function LogIn() {
                     p={8}
                     borderRadius="lg"
                     boxShadow="md"
-                    width={{ base: "90%", md: "450px" }}
+                    width={{base: "90%", md: "450px"}}
                 >
                     <VStack spacing={6} align="center" mb={8}>
                         <Text
@@ -135,7 +125,7 @@ export function LogIn() {
                             color="white"
                             size="md"
                             width="100%"
-                            _hover={{ bg: "#5957d7" }}
+                            _hover={{bg: "#5957d7"}}
                             onClick={handleLogin}
                             mt={2}
                             height="44px"

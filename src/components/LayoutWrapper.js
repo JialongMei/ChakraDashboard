@@ -128,6 +128,7 @@ const SideBox = () => {
     const isNotifications = location.pathname.includes("/dashboard/notifications");
     const isSettings = location.pathname.includes("/dashboard/settings");
     const isUserManagement = location.pathname.includes("/dashboard/users");
+    const isToDoList = location.pathname.includes("/dashboard/todolist");
 
     return (
         <Box
@@ -239,6 +240,15 @@ const SideBox = () => {
                                 text="User management"
                                 isActive={isUserManagement}
                                 to="/dashboard/users"
+                            />
+                        </GridItem>
+                        <GridItem>
+                            <MenuItem
+                                icon={User}
+                                notifications={0}
+                                text="To-do List"
+                                isActive={isToDoList}
+                                to="/dashboard/todolist"
                             />
                         </GridItem>
                     </Grid>
@@ -390,6 +400,8 @@ const LayoutWrapper = ({ children, pageTitle = "Dashboard" }) => {
         dynamicTitle = "Settings";
     } else if (location.pathname.includes("/dashboard/users")) {
         dynamicTitle = "User Management";
+    } else if (location.pathname.includes("/dashboard/todolist")) {
+        dynamicTitle = "To-do List";
     }
 
     return (
@@ -407,7 +419,7 @@ const LayoutWrapper = ({ children, pageTitle = "Dashboard" }) => {
                 <SideBox />
             </GridItem>
 
-            <GridItem overflow="auto"> // Changed from hidden to auto
+            <GridItem overflow="auto">
                 <Box
                     padding={{ base: 4, md: 6 }}
                     width="100%"

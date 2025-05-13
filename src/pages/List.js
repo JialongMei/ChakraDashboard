@@ -20,7 +20,7 @@ import Image1 from "../image/img_1.png";
 import { useState, useEffect } from "react";
 const index = 3;
 
-const SearchIcon = createIcon({
+export const SearchIcon = createIcon({
     displayName: "SearchIcon",
     viewBox: "0 0 24 24",
     defaultProps: {
