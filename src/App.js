@@ -7,6 +7,7 @@ import Users from './pages/Users';
 import ReviewsGrid from './pages/Grid';
 import ReviewsList from './pages/List';
 import TodoList from "./pages/TodoList";
+import TodoDetails from "./pages/TodoDetails";
 import PrivateRoute from './components/PrivateRoute';
 import PublicRoute from './components/PublicRoute';
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
@@ -31,6 +32,7 @@ function App() {
                             <Route path="/dashboard/reviews/list" element={<ReviewsList/>}/>
                             <Route path="/users" element={<Users/>}/>
                             <Route path="/dashboard/todolist" element={<TodoList/>}/>
+                            <Route path="/dashboard/todolist/:id" element={<TodoDetails/>}/>
                         </Route>
 
                         <Route path="/" element={<Navigate to="/login" replace/>}/>

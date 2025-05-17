@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from "react";
 import {Box, Button, Checkbox, createIcon, Flex, HStack, List, Text, VStack} from "@chakra-ui/react"
 import {SearchIcon} from "./List";
+import { useNavigate } from "react-router-dom";
+import { initialTodoListsData } from "../data/todoData.js";
 
 const index = 3;
 
@@ -18,15 +20,33 @@ const TrashCanIcon = createIcon({
     ),
 });
 
-const ListCard = ({title, owner, items, ...props}) => {
-// Use window width for custom breakpoints
+const ListCard = ({title, owner, items, id, ...props}) => {
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
-    // Define our breakpoints more explicitly
+    const [visibleItems, setVisibleItems] = useState(items);
+    const navigate = useNavigate();
+    
     const isMiniView = windowWidth <= 374;
     const isSmallScreen = windowWidth <= 457;
-    const shouldShowIconButtons = windowWidth <= 888; // Show icon buttons at 888px and below
-    const isMobileView = windowWidth < 768; // Standard mobile layout below md breakpoint
+    const shouldShowIconButtons = windowWidth <= 888;
+    const isMobileView = windowWidth < 768;
+
+    // Dynamically adjust visible items based on screen width
+    useEffect(() => {
+        let itemsToShow;
+        if (windowWidth < 500) {
+            itemsToShow = items.slice(0, 2);
+        } else if (windowWidth < 768) {
+            itemsToShow = items.slice(0, 3);
+        } else if (windowWidth < 992) {
+            itemsToShow = items.slice(0, 4);
+        } else if (windowWidth < 1200) {
+            itemsToShow = items.slice(0, 5);
+        } else {
+            itemsToShow = items.slice(0, 6);
+        }
+        
+        setVisibleItems(itemsToShow);
+    }, [windowWidth, items]);
 
     useEffect(() => {
         const handleResize = () => {
@@ -37,19 +57,29 @@ const ListCard = ({title, owner, items, ...props}) => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    // Calculate if we have more items to show
+    const hasMoreItems = items.length > visibleItems.length;
+
+    // Function to handle navigation to details page
+    const handleShowDetails = () => {
+        console.log("Navigating to details for ID:", id);
+        navigate(`/dashboard/todolist/${id}`);
+    };
+// isolate this file start with simple stuff
     return (
         <HStack
             bg="white"
             p={3}
             borderRadius="16px"
-            alignItems="flex-start"
+            alignItems="center"
             justifyContent="space-between"
-            height={{base: "90px", md: "100px"}}
+            height={{base: "auto", md: "auto"}}
+            minHeight={{base: "90px", md: "100px"}}
             spacing={2}
             flexWrap={{base: "wrap", md: "nowrap"}}
         >
             <HStack
-                alignItems="center"
+                alignItems="flex-start"
                 width={{base: "50%", sm: "70%", md: "100%"}}
                 ml={isSmallScreen ? 2 : 4}
                 overflow="hidden"
@@ -74,29 +104,50 @@ const ListCard = ({title, owner, items, ...props}) => {
                         </Text>
                     </Checkbox.Label>
                 </Checkbox.Root>
-                <Box 
+                <List.Root 
                     flexGrow={1} 
                     ml={{base: 4, sm: 8, md: 12}}
                     display="flex"
-                    flexDirection="column"
-                    justifyContent="center"
+                    flexDirection="row"
+                    flexWrap="wrap"
+                    gap={2}
+                    alignItems="flex-start"
                 >
-                    {items.map((item, index) => (
-                        <Text
+                    {visibleItems.map((item, index) => (
+                        <List.Item
                             key={index}
                             fontSize={{base: "2xs", sm: "12px"}}
                             fontWeight={400}
                             opacity={0.6}
-                            noOfLines={{base: 1, md: 1}}
+                            color="gray.950"
+                            flex="0 0 auto"
+                            minWidth="150px"
+                            maxWidth="200px"
+                            whiteSpace="nowrap"
                             overflow="hidden"
                             textOverflow="ellipsis"
-                            color="gray.950"
-                            isTruncated
+                            _hover={{
+                                overflow: "visible",
+                                zIndex: 1,
+                                bg: "white",
+                                boxShadow: "md",
+                                borderRadius: "md",
+                            }}
                         >
                             {item}
-                        </Text>
+                        </List.Item>
                     ))}
-                </Box>
+                    {hasMoreItems && (
+                        <List.Item
+                            fontSize={{base: "2xs", sm: "12px"}}
+                            fontWeight={500}
+                            color="blue.500"
+                            flex="0 0 auto"
+                        >
+                            +{items.length - visibleItems.length} more...
+                        </List.Item>
+                    )}
+                </List.Root>
             </HStack>
 
             {/* Mobile vertical buttons - for smaller screens */}
@@ -116,6 +167,7 @@ const ListCard = ({title, owner, items, ...props}) => {
                         width="36px"
                         minWidth="36px"
                         p={0}
+                        onClick={handleShowDetails}
                     >
                         <SearchIcon color="white" boxSize={4}/>
                     </Button>
@@ -151,6 +203,7 @@ const ListCard = ({title, owner, items, ...props}) => {
                         width="36px"
                         minWidth="36px"
                         p={0}
+                        onClick={handleShowDetails}
                     >
                         <SearchIcon color="white" boxSize={4}/>
                     </Button>
@@ -188,6 +241,7 @@ const ListCard = ({title, owner, items, ...props}) => {
                         height={{ md: "36px", lg: "45px" }}
                         fontSize={{ md: "13px" }}
                         px={2}
+                        onClick={handleShowDetails}
                     >
                         Show Details
                     </Button>
@@ -211,50 +265,7 @@ const ListCard = ({title, owner, items, ...props}) => {
 };
 
 const TodoList = () => {
-    const [todoLists, setTodoLists] = useState([
-        {
-            id: 1,
-            title: "Personal Tasks",
-            owner: "John Doe",
-            items: [
-                {id: 1, text: "Buy groceries", completed: false},
-                {id: 2, text: "Call mom", completed: true},
-                {id: 3, text: "Go to gym", completed: false},
-                {id: 4, text: "Pay bills", completed: false}
-            ],
-        },
-        {
-            id: 2,
-            title: "Work Tasks",
-            owner: "Jane Smith",
-            items: [
-                {id: 5, text: "Finish report", completed: false},
-                {id: 6, text: "Email client", completed: true},
-                {id: 7, text: "Team meeting", completed: false},
-                {id: 8, text: "Update documentation", completed: true}
-            ],
-        },
-        {
-            id: 3,
-            title: "Shopping List",
-            owner: "Alice Johnson",
-            items: [
-                {id: 9, text: "Buy milk", completed: false},
-                {id: 10, text: "Get new shoes", completed: false},
-                {id: 11, text: "Order books", completed: true}
-            ],
-        },
-        {
-            id: 4,
-            title: "Project Tasks",
-            owner: "Bob Wilson",
-            items: [
-                {id: 12, text: "Design mockups", completed: true},
-                {id: 13, text: "Review code", completed: false},
-                {id: 14, text: "Deploy website", completed: false}
-            ],
-        }
-    ]);
+    const [todoLists, setTodoLists] = useState(initialTodoListsData);
 
     return (
         <Box>
@@ -262,6 +273,7 @@ const TodoList = () => {
                 {todoLists.map((todo) => (
                     <ListCard
                         key={todo.id}
+                        id={todo.id}
                         title={todo.title}
                         owner={todo.owner}
                         items={todo.items.map(item => item.text)}
