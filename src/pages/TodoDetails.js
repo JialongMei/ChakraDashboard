@@ -11,6 +11,20 @@ import {
   Flex,
   IconButton,
   Checkbox,
+  Dialog,
+  DialogOverlay,
+  DialogContent,
+  DialogHeader,
+  DialogCloseButton,
+  DialogBody,
+  DialogFooter,
+  Portal,
+  Input,
+  Textarea,
+  Select,
+  useDisclosure,
+  CloseButton,
+  Field,
 } from "@chakra-ui/react";
 import { initialTodoListsData } from "../data/todoData.js";
 
@@ -101,7 +115,7 @@ const TodoItemCard = ({ item }) => {
       flexWrap={{ base: "wrap", md: "nowrap" }}
       spacing={4}
     >
-      <HStack spacing={3} flex="1" alignItems="flex-start">
+      <HStack spacing={3} flex="1" alignItems="center">
         <Checkbox.Root display="flex" alignItems="center">
           <Checkbox.HiddenInput />
           <Checkbox.Control />
@@ -217,7 +231,16 @@ const TodoDetails = () => {
   const [listTitle, setListTitle] = useState("");
   const [filterStatus, setFilterStatus] = useState("ALL");
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const { isOpen, onOpen, onClose } = useDisclosure(); // For Add Task Modal
   
+  // New task form state
+  const [newTask, setNewTask] = useState({
+    title: "",
+    description: "",
+    status: "PENDING",
+    assignee: "",
+  });
+
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
@@ -249,9 +272,31 @@ const TodoDetails = () => {
     { label: "Done", value: "DONE" }
   ];
   
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewTask(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Here you would typically make an API call to create the task
+    console.log("New task data:", newTask);
+    // Reset form
+    setNewTask({
+      title: "",
+      description: "",
+      status: "PENDING",
+      assignee: "",
+    });
+    onClose(); // Close modal after submission
+  };
+
   return (
-    <Box p={{ base: 3, md: 5 }} maxW="1200px" mx="auto">
-      <VStack spacing={{ base: 3, md: 5 }} align="stretch">
+    <Box p={{ base: 2, md: 4 }} maxW="100%" mx="auto">
+      <VStack spacing={{ base: 3, md: 4 }} align="stretch" maxW="1600px" mx="auto">
         {/* Header */}
         <HStack spacing={4} alignItems="center">
           <IconButton
@@ -280,27 +325,110 @@ const TodoDetails = () => {
               size="sm"
               variant={filterStatus === button.value ? "solid" : "outline"}
               colorScheme={filterStatus === button.value ? "blue" : "gray"}
+              bg={filterStatus === button.value ? "black" : "white"}
+              color={filterStatus === button.value ? "white" : "black"}
               onClick={() => setFilterStatus(button.value)}
-              borderRadius="full"
+              borderRadius="md"
               minW={{ base: "auto", md: "80px" }}
               px={{ base: 3, md: 4 }}
+                        _hover={{
+                            bg: button.value ? "gray.300" : "gray.100",
+                            transform: "translateY(2px)",
+                            boxShadow: "sm",
+                        }}
             >
               {button.label}
             </Button>
           ))}
         </HStack>
         
-        {/* Add New Task Button */}
-        <Box width="100%">
-          <Button
-            colorScheme="blue"
-            width={{ base: "100%", md: "auto" }}
-            mb={4}
-            borderRadius="8px"
-          >
-            Add New Task
-          </Button>
-        </Box>
+        {/* Add New Task Button and Dialog Structure */} 
+        <Dialog.Root 
+          open={isOpen} 
+          onOpenChange={(details) => { if (!details.open) onClose(); }} 
+          placement="center"
+        >
+          <Box width="100%"> {/* Wrapper for the trigger button if needed for layout */}
+            <Dialog.Trigger asChild>
+              <Button
+                colorPalette="blue"
+                width={{ base: "100%", md: "auto" }}
+                mb={4}
+                borderRadius="8px"
+                // onClick={onOpen} REMOVED - Dialog.Trigger handles this
+              >
+                Add New Task
+              </Button>
+            </Dialog.Trigger>
+          </Box>
+
+          {/* Dialog Portal and Content - Rendered conditionally by Dialog.Root logic based on 'open' prop */}
+          {/* No need for explicit {isOpen && (...)} here if Dialog.Root handles presence via 'open' prop */}
+          <Portal>
+            <Dialog.Backdrop />
+            <Dialog.Positioner>
+              <Dialog.Content as="form" onSubmit={handleSubmit} mx={{ base: 4, md: 0 }} width={{base: "90%", md: "md"}}>
+                <Dialog.Header pt={4} px={4} pb={2}> {/* Adjusted padding */}
+                  <Dialog.Title fontSize="lg" fontWeight="semibold">Add New Task</Dialog.Title> {/* Used Dialog.Title */}
+                  <Dialog.CloseTrigger asChild>
+                    <CloseButton position="absolute" top="10px" right="10px" /> {/* Standard CloseButton */}
+                  </Dialog.CloseTrigger>
+                </Dialog.Header>
+                <Dialog.Body px={4} pb={4}> {/* Adjusted padding */}
+                  <Field.Root name="title" required>
+                    <Field.Label>Title</Field.Label>
+                    <Input
+                      name="title"
+                      value={newTask.title}
+                      onChange={handleInputChange}
+                      placeholder="Enter task title"
+                    />
+                  </Field.Root>
+
+                  <Field.Root name="description" mt={4}>
+                    <Field.Label>Description</Field.Label>
+                    <Textarea
+                      name="description"
+                      value={newTask.description}
+                      onChange={handleInputChange}
+                      placeholder="Enter task description"
+                    />
+                  </Field.Root>
+
+                  <Field.Root name="status" mt={4} required>
+                    <Field.Label>Status</Field.Label>
+                    <Select
+                      name="status"
+                      value={newTask.status}
+                      onChange={handleInputChange}
+                    >
+                      <option value="PENDING">Pending</option>
+                      <option value="IN_PROGRESS">In Progress</option>
+                      <option value="DONE">Done</option>
+                    </Select>
+                  </Field.Root>
+
+                  <Field.Root name="assignee" mt={4}>
+                    <Field.Label>Assignee</Field.Label>
+                    <Input
+                      name="assignee"
+                      value={newTask.assignee}
+                      onChange={handleInputChange}
+                      placeholder="Enter assignee name or ID"
+                    />
+                  </Field.Root>
+                </Dialog.Body>
+                {/* Simplified Footer using Box */}
+                <Box display="flex" justifyContent="flex-end" px={4} pb={4} pt={2}>
+                  <Button colorPalette="blue" mr={3} type="submit">
+                    Save
+                  </Button>
+                  <Button variant="ghost" onClick={onClose}>Cancel</Button>
+                </Box>
+              </Dialog.Content>
+            </Dialog.Positioner>
+          </Portal>
+        </Dialog.Root> {/* Moved Dialog.Root to wrap the trigger too */} 
         
         {/* Todo Items List */}
         <VStack spacing={3} align="stretch">
