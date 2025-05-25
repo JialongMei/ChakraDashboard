@@ -243,10 +243,9 @@ export const useDeleteTodoList = () => {
 
 // Items assigned to the current user
 export const useAssignedToMe = () => {
-    const queryClient = useQueryClient();
-
-    return useMutation({
-        mutationFn: async (itemId) => {
+    return useQuery({
+        queryKey: ['assignedToMe'],
+        queryFn: async () => {
             const token = await getAuthToken();
             const response = await fetch(`${API_BASE_URL}${ENDPOINTS.assignedToMe}`, {
                 method: 'GET',
@@ -261,23 +260,26 @@ export const useAssignedToMe = () => {
                 return null;
             }
             const text = await response.text();
-            return text ? JSON.parse(text) : null;
+            return text ? JSON.parse(text) : []; // Return empty array for no content or actual data
         },
+        // Add other useQuery options as needed, e.g., staleTime, cacheTime
     });
 };
 
 // Change an item's assignee ID to assign an item to another user
-export const useAssignToOther = () => {
+export const useAssignToOther = (listId) => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async (itemId) => {
+        mutationFn: async ({ itemId, newAssigneeId }) => {
             const token = await getAuthToken();
-            const response = await fetch(`${API_BASE_URL}${ENDPOINTS.assignedToMe}${itemId}/`, {
+            const response = await fetch(`${API_BASE_URL}${ENDPOINTS.assignToOther}${itemId}/`, {
                 method: 'PATCH',
                 headers: {
+                    'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
-                }
+                },
+                body: JSON.stringify({ assignee_id: newAssigneeId })
             });
             if (!response.ok) {
                 throw new Error('Network response was not ok when assigning item to another user');
@@ -288,5 +290,9 @@ export const useAssignToOther = () => {
             const text = await response.text();
             return text ? JSON.parse(text) : null;
         },
+        onSuccess: (data, variables) => {
+            queryClient.invalidateQueries({ queryKey: ['todoItems', listId] });
+            queryClient.invalidateQueries({ queryKey: ['assignedToMe'] });
+        }
     });
 };

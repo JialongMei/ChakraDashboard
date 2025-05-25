@@ -19,9 +19,13 @@ import {
     useDisclosure,
     VStack,
     NativeSelect,
+    Menu,
+    MenuButton,
+    MenuList,
+    MenuItem,
 } from "@chakra-ui/react";
 import {initialTodoListsData} from "../data/todoData.js";
-import {useCreateTodoItem, useTodoItems, useDeleteTodoItem, useUpdateTodoItem} from "../api/todoApi";
+import {useCreateTodoItem, useTodoItems, useDeleteTodoItem, useUpdateTodoItem, useAssignToOther} from "../api/todoApi";
 import {useAuth} from "../context/AuthContext";
 
 // Back arrow icon
@@ -32,7 +36,7 @@ const BackArrowIcon = () => (
     </svg>
 );
 
-const TodoItemCard = ({item, onEdit, onDelete}) => {
+const TodoItemCard = ({item, onEdit, onDelete, onOpenAssignDialog}) => {
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const isMobileView = windowWidth < 768;
 
@@ -80,10 +84,10 @@ const TodoItemCard = ({item, onEdit, onDelete}) => {
                     <Checkbox.Control/>
                 </Checkbox.Root>
 
-                <VStack align="flex-start" spacing={2} flex="1">
+                <VStack align="flex-start" spacing={2} ml={2} mt={4} flex="1">
                     <HStack width="100%" justifyContent="space-between" alignItems="center">
                         <Text
-                            fontSize={{base: "sm", md: "md"}}
+                            fontSize={{base: "sm", md: "md", lg: "lg"}}
                             fontWeight={600}
                             noOfLines={1}
                             overflow="hidden"
@@ -125,21 +129,33 @@ const TodoItemCard = ({item, onEdit, onDelete}) => {
             </HStack>
 
             {!isMobileView && (
-                <HStack spacing={2}>
+                <VStack spacing={2} alignItems="center" mt={2}>
+                    <Menu.Root>
+                        <Menu.Trigger asChild>
+                            <Button
+                                size="sm"
+                                bg="#A3A1FF"
+                                color="white"
+                                borderRadius="8px"
+                                _hover={{bg: "#8583F4"}}
+                                height="36px"
+                                fontSize="xs"
+                                px={3}
+                            >
+                                Edit Actions
+                            </Button>
+                        </Menu.Trigger>
+                        <Portal>
+                            <Menu.Positioner>
+                                <Menu.Content>
+                                    <Menu.Item value="editDetails" onClick={onEdit}>Edit Task Details</Menu.Item>
+                                    <Menu.Item value="assignToOther" onClick={() => onOpenAssignDialog(item)}>Assign to Other</Menu.Item>
+                                </Menu.Content>
+                            </Menu.Positioner>
+                        </Portal>
+                    </Menu.Root>
                     <Button
-                        size="sm"
-                        bg="#A3A1FF"
-                        color="white"
-                        borderRadius="8px"
-                        _hover={{bg: "#8583F4"}}
-                        height="36px"
-                        fontSize="xs"
-                        px={3}
-                        onClick={onEdit}
-                    >
-                        Edit
-                    </Button>
-                    <Button
+                        mt={2}
                         size="sm"
                         bg="gray.500"
                         color="white"
@@ -152,24 +168,35 @@ const TodoItemCard = ({item, onEdit, onDelete}) => {
                     >
                         Delete
                     </Button>
-                </HStack>
+                </VStack>
             )}
 
             {isMobileView && (
                 <HStack spacing={2} width="100%" mt={2} justifyContent="flex-end">
-                    <Button
-                        size="sm"
-                        bg="#A3A1FF"
-                        color="white"
-                        borderRadius="8px"
-                        _hover={{bg: "#8583F4"}}
-                        height="30px"
-                        fontSize="xs"
-                        px={3}
-                        onClick={onEdit}
-                    >
-                        Edit
-                    </Button>
+                    <Menu.Root>
+                        <Menu.Trigger asChild>
+                            <Button
+                                size="sm"
+                                bg="#A3A1FF"
+                                color="white"
+                                borderRadius="8px"
+                                _hover={{bg: "#8583F4"}}
+                                height="30px"
+                                fontSize="xs"
+                                px={3}
+                            >
+                                Edit Actions
+                            </Button>
+                        </Menu.Trigger>
+                        <Portal>
+                            <Menu.Positioner>
+                                <Menu.Content>
+                                    <Menu.Item value="editDetails" onClick={onEdit}>Edit Task Details</Menu.Item>
+                                    <Menu.Item value="assignToOther" onClick={() => onOpenAssignDialog(item)}>Assign to Other</Menu.Item>
+                                </Menu.Content>
+                            </Menu.Positioner>
+                        </Portal>
+                    </Menu.Root>
                     <Button
                         size="sm"
                         bg="gray.500"
@@ -203,6 +230,11 @@ const TodoDetails = message => {
     // State and handlers for "Edit Task" Dialog
     const [editTask, setEditTask] = useState(null); // Holds the item being edited
     const [isEditOpen, setIsEditOpen] = useState(false); // Controls edit dialog visibility
+
+    // State for "Assign to Other" Dialog
+    const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
+    const [taskToAssign, setTaskToAssign] = useState(null);
+    const [newAssigneeId, setNewAssigneeId] = useState("");
 
     const {
         data: items,
@@ -275,6 +307,7 @@ const TodoDetails = message => {
     const createItem = useCreateTodoItem(id);
     const updateItem = useUpdateTodoItem(id);
     const deleteItem = useDeleteTodoItem(id);
+    const assignToOtherMutation = useAssignToOther(id); // Renamed for clarity
 
     const hanldeCreateItem = async(newItem) => {
         try {
@@ -288,7 +321,6 @@ const TodoDetails = message => {
     const openEditDialog = (itemToEdit) => {
         setEditTask({ // Pre-fill the form with the item's current data
             ...itemToEdit,
-            // Handle assignee, which might be an object or just an ID/name
             assignee: itemToEdit.assignee ? (itemToEdit.assignee.name || itemToEdit.assignee) : "",
         });
         setIsEditOpen(true);
@@ -321,6 +353,38 @@ const TodoDetails = message => {
             // Items list will refetch due to React Query's onSuccess invalidation in useUpdateTodoItem
         } catch (error) {
             alert("Error updating task: " + error.message);
+        }
+    };
+
+    // Implement onOpenAssignDialog (renamed from openAssignDialog for consistency)
+    const onOpenAssignDialog = (itemToAssign) => {
+        setTaskToAssign(itemToAssign);
+        setNewAssigneeId(""); // Reset assignee ID input
+        setIsAssignDialogOpen(true);
+    };
+
+    const closeAssignDialog = () => {
+        setIsAssignDialogOpen(false);
+        setTaskToAssign(null);
+        setNewAssigneeId("");
+    };
+
+    const handleAssignSubmit = async (e) => {
+        e.preventDefault();
+        if (!taskToAssign || !newAssigneeId.trim()) {
+            alert("Please select a task and enter an assignee ID.");
+            return;
+        }
+        try {
+            await assignToOtherMutation.mutateAsync({ 
+                itemId: taskToAssign.id, 
+                newAssigneeId: newAssigneeId.trim()
+            });
+            alert("Task assigned successfully!");
+            closeAssignDialog();
+            // The query invalidation in useAssignToOther should handle refetching
+        } catch (error) {
+            alert("Error assigning task: " + (error.message || "Unknown error"));
         }
     };
 
@@ -465,7 +529,8 @@ const TodoDetails = message => {
                             <TodoItemCard key={item.id}
                                           item={item}
                                           onEdit={() => openEditDialog(item)}
-                                          onDelete={() => deleteItem.mutateAsync(item.id)}/>
+                                          onDelete={() => deleteItem.mutateAsync(item.id)}
+                                          onOpenAssignDialog={onOpenAssignDialog}/>
                         ))
                     )}
                 </VStack>
@@ -534,6 +599,42 @@ const TodoDetails = message => {
                                         </Button>
                                         <Dialog.CloseTrigger asChild>
                                             <CloseButton onClick={closeEditDialog} />
+                                        </Dialog.CloseTrigger>
+                                    </Box>
+                                </Dialog.Content>
+                            </Dialog.Positioner>
+                        </Portal>
+                    </Dialog.Root>
+                )}
+
+                {/* "ASSIGN TO OTHER" DIALOG JSX */}
+                {taskToAssign && (
+                    <Dialog.Root open={isAssignDialogOpen} onOpenChange={setIsAssignDialogOpen} placement="center">
+                        <Portal>
+                            <Dialog.Backdrop />
+                            <Dialog.Positioner>
+                                <Dialog.Content as="form" onSubmit={handleAssignSubmit} mx={{ base: 4, md: 0 }} width={{ base: "90%", md: "md" }}>
+                                    <Dialog.Header pt={4} px={4} pb={2}>
+                                        <Dialog.Title fontSize="lg" fontWeight="semibold">Assign Task to Other</Dialog.Title>
+                                    </Dialog.Header>
+                                    <Dialog.Body px={4} pb={4}>
+                                        <Text mb={2}>Assigning task: <strong>{taskToAssign.title}</strong></Text>
+                                        <Field.Root name="newAssigneeId" required>
+                                            <Field.Label>New Assignee ID</Field.Label>
+                                            <Input
+                                                name="newAssigneeId"
+                                                value={newAssigneeId}
+                                                onChange={(e) => setNewAssigneeId(e.target.value)}
+                                                placeholder="Enter new Assignee ID"
+                                            />
+                                        </Field.Root>
+                                    </Dialog.Body>
+                                    <Box display="flex" justifyContent="flex-end" px={4} pb={4} pt={2}>
+                                        <Button colorPalette="blue" mr={3} type="submit" isLoading={assignToOtherMutation.isLoading}>
+                                            Assign
+                                        </Button>
+                                        <Dialog.CloseTrigger asChild>
+                                            <CloseButton onClick={closeAssignDialog} />
                                         </Dialog.CloseTrigger>
                                     </Box>
                                 </Dialog.Content>

@@ -305,6 +305,7 @@ const TodoList = () => {
     const [todoLists, setTodoLists] = useState(initialTodoListsData);
     const { user, loading } = useAuth();
     const {isOpen: isAddOpen, onOpen: onAddOpen, onClose: onAddClose} = useDisclosure();
+    const navigate = useNavigate();
 
     // Test fetching all todo lists
     const {
@@ -422,21 +423,24 @@ const TodoList = () => {
                 ))}
             </VStack>
 
-            {/* Dialog for adding new list */}
-            <Dialog.Root
-                placement="center"
-            >
-                <Dialog.Trigger asChild>
-                    <Button
-                        colorPalette="blue"
-                        width={{base: "106px", sm: "106px", md: "106px", custom: "106px", lg: "130px"}}
-                        mt={4}
-                        borderRadius="8px"
-                        fontSize={{base: "sm", sm: "sm", md: "sm", custom: "sm", lg: "md"}}
-                    >
-                        Add New List
-                    </Button>
-                </Dialog.Trigger>
+            {/* Container for Buttons at the bottom */}
+            <HStack mt={4} spacing={4}> 
+                {/* Dialog for adding new list */}
+                <Dialog.Root
+                    placement="center"
+                >
+                    <Dialog.Trigger asChild>
+                        <Button
+                            colorPalette="blue"
+                            // Consistent width for all buttons
+                            width={{base: "auto", sm: "auto", md: "auto", lg: "auto"}}
+                            minWidth={{base: "106px", lg: "130px"}}
+                            borderRadius="8px"
+                            fontSize={{base: "sm", lg: "md"}}
+                        >
+                            Add New List
+                        </Button>
+                    </Dialog.Trigger>
 
                 <Portal>
                     <Dialog.Backdrop/>
@@ -470,6 +474,21 @@ const TodoList = () => {
                     </Dialog.Positioner>
                 </Portal>
             </Dialog.Root>
+
+            {/* Button to navigate to assigned tasks */}
+            <Button
+                colorPalette="green" // Or another color of your choice
+                onClick={() => navigate("/dashboard/assigned-to-me")}
+                // Consistent width for all buttons
+                width={{base: "auto", sm: "auto", md: "auto", lg: "auto"}}
+                minWidth={{base: "106px", lg: "130px"}}
+                mt={{base: 2, sm: 0}} // Add some top margin on mobile if they stack
+                borderRadius="8px"
+                fontSize={{base: "sm", lg: "md"}}
+            >
+                My Assigned Tasks
+            </Button>
+        </HStack>
 
             {editingList && (
                 <Dialog.Root open={isListEditDialogOpen} onOpenChange={setIsListEditDialogOpen} placement="center">

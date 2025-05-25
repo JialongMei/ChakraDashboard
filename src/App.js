@@ -9,6 +9,7 @@ import ReviewsList from './pages/List';
 import TodoList from "./pages/TodoList";
 import TodoDetails from "./pages/TodoDetails";
 import TodoTest from "./pages/TodoTest";
+import AssignedTasksPage from './pages/AssignedTasksPage';
 import PrivateRoute from './components/PrivateRoute';
 import PublicRoute from './components/PublicRoute';
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
@@ -36,6 +37,7 @@ function App() {
                                 <Route path="/users" element={<Users/>}/>
                                 <Route path="/dashboard/todolist" element={<TodoList/>}/>
                                 <Route path="/dashboard/todolist/:id" element={<TodoDetails/>}/>
+                                <Route path="/dashboard/assigned-to-me" element={<AssignedTasksPage />} />
                                 <Route path="/test" element={<TodoTest/>}/>
                             </Route>
 
