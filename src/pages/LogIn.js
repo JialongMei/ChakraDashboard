@@ -17,24 +17,14 @@ import {login as firebaseLogin} from "../useFirebaseAuth";
 export function LogIn() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [users, setUsers] = useState([]);
     const [error, setError] = useState("");
     const navigate = useNavigate();
     const { login } = useAuth();
 
-    useEffect(() => {
-        const storedUsers = localStorage.getItem("users");
-        if (storedUsers) {
-            setUsers(JSON.parse(storedUsers));
-        }
-    }, []);
-
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            await firebaseLogin(email, password);
-            alert("Login successful");
-            login(); // Update authentication state using context
+            await login(email, password);  // Use the context's login function directly
             navigate("/dashboard");
         } catch (error) {
             setError(error.message);
