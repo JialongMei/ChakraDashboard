@@ -127,13 +127,13 @@ const SideBox = () => {
     const isWebCrawler = location.pathname.includes("/dashboard/webcrawler");
     const isNotifications = location.pathname.includes("/dashboard/notifications");
     const isSettings = location.pathname.includes("/dashboard/settings");
-    const isUserManagement = location.pathname.includes("/dashboard/users");
+    const isUserManagement = location.pathname.includes("/user-management");
     const isToDoList = location.pathname.includes("/dashboard/todolist");
 
     return (
         <Box
             bg="#ffffff"
-            width="225px"
+            width="230px"
             // height="100%"
             position="fixed"
             bottom={0}
@@ -239,7 +239,7 @@ const SideBox = () => {
                                 notifications={0}
                                 text="User management"
                                 isActive={isUserManagement}
-                                to="/dashboard/users"
+                                to="/user-management"
                             />
                         </GridItem>
                         <GridItem>

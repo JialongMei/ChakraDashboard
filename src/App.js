@@ -8,12 +8,13 @@ import ReviewsGrid from './pages/Grid';
 import ReviewsList from './pages/List';
 import TodoList from "./pages/TodoList";
 import TodoDetails from "./pages/TodoDetails";
-import TodoTest from "./pages/TodoTest";
+// import TodoTest from "./pages/TodoTest";
 import AssignedTasksPage from './pages/AssignedTasksPage';
 import PrivateRoute from './components/PrivateRoute';
 import PublicRoute from './components/PublicRoute';
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import { AuthProvider } from './context/AuthContext';
+import UserManagement from "./pages/UserManagement";
 
 const queryClient = new QueryClient();
 
@@ -35,10 +36,11 @@ function App() {
                                 <Route path="/dashboard/reviews/grid" element={<ReviewsGrid/>}/>
                                 <Route path="/dashboard/reviews/list" element={<ReviewsList/>}/>
                                 <Route path="/users" element={<Users/>}/>
+                                <Route path="/user-management" element={<UserManagement/>}/>
                                 <Route path="/dashboard/todolist" element={<TodoList/>}/>
                                 <Route path="/dashboard/todolist/:id" element={<TodoDetails/>}/>
                                 <Route path="/dashboard/assigned-to-me" element={<AssignedTasksPage />} />
-                                <Route path="/test" element={<TodoTest/>}/>
+                                {/*<Route path="/test" element={<TodoTest/>}/>*/}
                             </Route>
 
                             <Route path="/" element={<Navigate to="/login" replace/>}/>

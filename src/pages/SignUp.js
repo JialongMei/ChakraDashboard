@@ -9,6 +9,7 @@ import {
     Input,
     Text,
     VStack,
+    Spinner,
 } from "@chakra-ui/react";
 import {register as firebaseRegister} from "../useFirebaseAuth";
 
@@ -17,6 +18,8 @@ export default function SignUp() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [error, setError] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+    const [showSuccess, setShowSuccess] = useState(false);
     const [users, setUsers] = useState([])
     const {login} = useAuth()
 
@@ -29,15 +32,27 @@ export default function SignUp() {
     }, []);
 
     const handleRegister = async (e) => {
-    e.preventDefault();
-    try {
-      await firebaseRegister(email, password);
-      alert("Account created successfully!");
-      login();
-    } catch (error) {
-      alert(error.message);
-    }
-  };
+        e.preventDefault();
+        if (!email || !password) {
+          setError("Email and password are required.");
+          return;
+        }
+        
+        setIsLoading(true);
+        setError(""); // Clear any previous errors
+        
+        try {
+          await firebaseRegister(email, password);
+          // Show success message briefly before redirect
+          setError(""); // Make sure no error is shown
+          setShowSuccess(true);
+          // The user will be automatically redirected after successful registration
+        } catch (error) {
+          setError(error.message);
+        } finally {
+          setIsLoading(false);
+        }
+      };
 
     return (
         <Container maxW="100%" p={0} height="100vh" bg="#F7F8FC">
@@ -95,6 +110,7 @@ export default function SignUp() {
                                 onChange={(e) => setEmail(e.target.value)}
                                 borderRadius="md"
                                 focusBorderColor="#6F6CF3"
+                                disabled={isLoading}
                             />
                         </Box>
 
@@ -111,6 +127,7 @@ export default function SignUp() {
                                 onChange={(e) => setPassword(e.target.value)}
                                 borderRadius="md"
                                 focusBorderColor="#6F6CF3"
+                                disabled={isLoading}
                             />
                         </Box>
 
@@ -119,14 +136,44 @@ export default function SignUp() {
                             color="white"
                             size="md"
                             width="100%"
-                            _hover={{ bg: "#5957d7" }}
+                            _hover={{ bg: isLoading ? "#6F6CF3" : "#5957d7" }}
                             onClick={handleRegister}
                             mt={2}
                             height="44px"
                             fontWeight="500"
+                            isLoading={isLoading}
+                            loadingText="Creating account..."
+                            disabled={isLoading}
                         >
-                            Sign Up
+                            {isLoading ? "Creating account..." : "Sign Up"}
                         </Button>
+
+                        {isLoading && (
+                            <Box textAlign="center" mt={3}>
+                                <Text fontSize="sm" color="gray.600">
+                                    Please wait, we're setting up your account...
+                                </Text>
+                            </Box>
+                        )}
+
+                        {showSuccess && (
+                            <Box 
+                                textAlign="center" 
+                                mt={3} 
+                                p={3} 
+                                borderRadius="md" 
+                                bg="green.50" 
+                                border="1px solid" 
+                                borderColor="green.200"
+                            >
+                                <Box display="flex" alignItems="center" justifyContent="center" gap={2}>
+                                    <Spinner size="sm" color="green.500" />
+                                    <Text fontSize="sm" color="green.700" fontWeight="medium">
+                                        Account created successfully! Redirecting...
+                                    </Text>
+                                </Box>
+                            </Box>
+                        )}
                     </VStack>
                 </Box>
             </Flex>

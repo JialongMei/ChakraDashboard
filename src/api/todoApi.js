@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
 import { auth } from '../firebase';
 
 // Base URL for your API
@@ -10,6 +10,27 @@ const ENDPOINTS = {
     todoItems: 'todo_item/',
     assignedToMe: 'todo_item/assigned_to_me/',
     assignToOther: 'todo_item/assign_task/',
+    users: 'user/list_users/',
+    currentUser: 'user/user_profile/',
+    updateCurrentUser: 'user/update_profile/'
+};
+
+export const useCurrentUser = () => {
+    return useQuery({
+        queryKey: ['currentUser'],
+        queryFn: async () => {
+            const token = await getAuthToken();
+            const response = await fetch(`${API_BASE_URL}${ENDPOINTS.currentUser}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        },
+    });
 };
 
 // Helper function to get auth token
@@ -60,13 +81,15 @@ export const useTodoList = (listId) => {
     });
 };
 
-// Fetch todo items for a specific list
+const ITEMS_PER_PAGE = 10; // Define page size for infinite scrolling
+
+// Fetch todo items for a specific list with infinite scrolling
 export const useTodoItems = (listId) => {
-    return useQuery({
+    return useInfiniteQuery({
         queryKey: ['todoItems', listId],
-        queryFn: async () => {
+        queryFn: async ({ pageParam = 1 }) => {
             const token = await getAuthToken();
-            const response = await fetch(`${API_BASE_URL}${ENDPOINTS.todoLists}${listId}/`, {
+            const response = await fetch(`${API_BASE_URL}${ENDPOINTS.todoLists}${listId}/?page=${pageParam}&limit=${ITEMS_PER_PAGE}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -74,9 +97,56 @@ export const useTodoItems = (listId) => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            return response.json();
+            const data = await response.json();
+            
+            // Return both items and pagination info
+            return {
+                items: data.items || [],
+                currentPage: pageParam,
+                hasNext: data.has_next || false,
+                totalPages: data.total_pages || 1,
+                totalItems: data.total_items || (data.items ? data.items.length : 0)
+            };
         },
-        enabled: !!listId,
+        getNextPageParam: (lastPage, allPages) => {
+            // Check if backend explicitly says there are more pages
+            if (lastPage.hasNext && lastPage.items && lastPage.items.length > 0) {
+                return lastPage.currentPage + 1;
+            }
+            
+            // Fallback: if no explicit pagination info, use length check but be more careful
+            if (lastPage.items && lastPage.items.length === ITEMS_PER_PAGE) {
+                console.log("!!!!!!!!!!!!!!!");
+                const nextPageNumber = lastPage.currentPage + 1;
+                
+                // Additional safety check: don't go beyond reasonable limits
+                if (lastPage.totalPages && nextPageNumber > lastPage.totalPages) {
+                    return undefined;
+                }
+                
+                // Extra safety: check if we've seen these items before to prevent infinite loops
+                const allItemIds = new Set();
+                for (const page of allPages) {
+                    if (page.items) {
+                        for (const item of page.items) {
+                            allItemIds.add(item.id);
+                        }
+                    }
+                }
+                
+                // If we have fewer unique items than expected for the number of pages,
+                // we might be getting duplicates, so stop
+                const expectedMinItems = (allPages.length - 1) * ITEMS_PER_PAGE;
+                if (allItemIds.size < expectedMinItems) {
+                    return undefined;
+                }
+                
+                return nextPageNumber;
+            }
+            
+            return undefined; // No more pages
+        },
+        enabled: !!listId, // Only run a query if listId is provided
     });
 };
 
@@ -126,8 +196,8 @@ export const useCreateTodoItem = (listId) => {
             }
             return response.json();
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['todoItems', listId] });
+        onSuccess: (newItemData) => {
+                queryClient.invalidateQueries({ queryKey: ['todoItems', listId] });
         },
     });
 };
@@ -152,8 +222,8 @@ export const useUpdateTodoItem = (listId) => {
             }
             return response.json();
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['todoItems', listId] });
+        onSuccess: (updatedItemData, variables) => {
+                queryClient.invalidateQueries({ queryKey: ['todoItems', listId] });
         },
     });
 };
@@ -175,14 +245,13 @@ export const useDeleteTodoItem = (listId) => {
                 throw new Error('Network response was not ok');
             }
             if (response.status === 204) {
-                // Deletion successful
-                return;
+                return null;
             }
             const text = await response.text();
             return text ? JSON.parse(text) : null;
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['todoItems', listId] });
+        onSuccess: (data, itemId) => {
+                queryClient.invalidateQueries({ queryKey: ['todoItems', listId] });
         },
     });
 };
@@ -247,24 +316,37 @@ export const useAssignedToMe = () => {
         queryKey: ['assignedToMe'],
         queryFn: async () => {
             const token = await getAuthToken();
+
+
             const response = await fetch(`${API_BASE_URL}${ENDPOINTS.assignedToMe}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             });
+
             if (!response.ok) {
-                throw new Error('Network response was not ok when getting assigned items');
+                let errorMessage = 'Network response was not ok when getting assigned items';
+                try {
+                    // Attempt to parse a JSON error response from the backend
+                    const errorData = await response.json();
+                    errorMessage = errorData.detail || errorData.error || errorMessage;
+                } catch (e) {
+                    // If parsing errorData fails, use the generic message
+                }
+                throw new Error(errorMessage);
             }
-            if (response.status === 204) { // No Content
-                return null;
+
+            if (response.status === 204) {
+                return []; // Return an empty array as no items are present
             }
-            const text = await response.text();
-            return text ? JSON.parse(text) : []; // Return empty array for no content or actual data
+            const data = await response.json(); // Parse the JSON response body
+
+            return data && data.results ? data.results : [];
         },
-        // Add other useQuery options as needed, e.g., staleTime, cacheTime
     });
 };
+
 
 // Change an item's assignee ID to assign an item to another user
 export const useAssignToOther = (listId) => {
@@ -294,5 +376,64 @@ export const useAssignToOther = (listId) => {
             queryClient.invalidateQueries({ queryKey: ['todoItems', listId] });
             queryClient.invalidateQueries({ queryKey: ['assignedToMe'] });
         }
+    });
+};
+
+// Fetch all users for dropdown selections
+export const useUsers = () => {
+    return useQuery({
+        queryKey: ['users'],
+        queryFn: async () => {
+            const token = await getAuthToken();
+            const response = await fetch(`${API_BASE_URL}${ENDPOINTS.users}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (!response.ok) {
+                let errorMessage = 'Network response was not ok when getting users';
+                try {
+                    const errorData = await response.json();
+                    errorMessage = errorData.detail || errorData.error || errorMessage;
+                } catch (e) {
+                    // If parsing errorData fails, use the generic message
+                }
+                throw new Error(errorMessage);
+            }
+            const data = await response.json();
+            
+            // Return the users array - adjust based on API response structure
+            return data && data.results ? data.results : data;
+        },
+    });
+};
+
+// Update current user profile
+export const useUpdateCurrentUser = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async (updatedData) => {
+            const token = await getAuthToken();
+            const response = await fetch(`${API_BASE_URL}${ENDPOINTS.updateCurrentUser}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(updatedData),
+            });
+            if (!response.ok) {
+                let errorMessage = 'Network response was not ok when updating user profile';
+                try {
+                    const errorData = await response.json();
+                    errorMessage = errorData.detail || errorData.error || errorMessage;
+                } catch (e) {}
+                throw new Error(errorMessage);
+            }
+            return response.json();
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['currentUser'] });
+        },
     });
 };

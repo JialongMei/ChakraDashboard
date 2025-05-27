@@ -11,7 +11,7 @@ import {
     Text,
     VStack,
     IconButton,
-    useDisclosure, Input, NativeSelect
+    Input, NativeSelect
 } from "@chakra-ui/react"
 import {SearchIcon} from "./List";
 import { useNavigate } from "react-router-dom";
@@ -304,7 +304,6 @@ const ListCard = ({title, owner, items, id, onEdit, onDelete, ...props}) => {
 const TodoList = () => {
     const [todoLists, setTodoLists] = useState(initialTodoListsData);
     const { user, loading } = useAuth();
-    const {isOpen: isAddOpen, onOpen: onAddOpen, onClose: onAddClose} = useDisclosure();
     const navigate = useNavigate();
 
     // Test fetching all todo lists
@@ -320,33 +319,53 @@ const TodoList = () => {
     // State for Edit List Dialog
     const [editingList, setEditingList] = useState(null);
     const [isListEditDialogOpen, setIsListEditDialogOpen] = useState(false);
+    
+    // State for Add New List Dialog
+    const [isAddListDialogOpen, setIsAddListDialogOpen] = useState(false);
+    
     const [newList, setNewList] = useState({
         title: "",
         // Add description if your "Add New List" dialog will also have a description field
         // description: "", 
     });
 
+    // Error states for form fields
+    const [newListErrors, setNewListErrors] = useState({
+        title: ""
+    });
+    const [editListErrors, setEditListErrors] = useState({
+        title: ""
+    });
+
     const hanldeCreateList = async(listData) => {
         try {
             await createList.mutateAsync(listData);
-            alert("List created successfully!");
-            setNewList({ title: "" }); // Reset form state
-            onAddClose(); // Close dialog on success
+            closeAddListDialog(); // Use the new close function
         } catch (error) {
-            alert("Error creating List:", error.message);
-            // Optionally, you might not want to close the dialog on error
-            // so the user can try again or see the input values.
+            // Set error message as placeholder for the title field
+            setNewListErrors(prev => ({
+                ...prev,
+                title: error.message || "Error creating list"
+            }));
+            throw error; // Re-throw to prevent dialog from closing
         }
     }
 
     const handleCreateSubmit = async (e) => {
         e.preventDefault();
-        // No try-catch needed here if hanldeCreateList handles its own errors
-        // and we don't need to do anything specific in handleCreateSubmit on error.
+        
+        // Clear previous errors
+        setNewListErrors({
+            title: ""
+        });
+
+        try {
         await hanldeCreateList({
             ...newList,
         });
-        // The form reset and dialog close are now handled by hanldeCreateList on success.
+        } catch (error) {
+            // Error is already handled in hanldeCreateList
+        }
     };
 
     useEffect(() => {
@@ -355,12 +374,39 @@ const TodoList = () => {
         }
     }, [lists]);
 
-    // Helper functions for Edit List Dialog
+    // Open/Close functions for Add New List Dialog
+    const openAddListDialog = () => {
+        // Reset form and errors when opening
+        setNewList({
+            title: ""
+        });
+        setNewListErrors({
+            title: ""
+        });
+        setIsAddListDialogOpen(true);
+    };
+
+    const closeAddListDialog = () => {
+        setIsAddListDialogOpen(false);
+        // Clear form data and errors
+        setNewList({
+            title: ""
+        });
+        setNewListErrors({
+            title: ""
+        });
+    };
+
+    // Open/Close functions for Edit List Dialog
     const openListEditDialog = (listToEdit) => {
         setEditingList({
             id: listToEdit.id,
             title: listToEdit.title,
             description: listToEdit.description || "",
+        });
+        // Clear any previous errors
+        setEditListErrors({
+            title: ""
         });
         setIsListEditDialogOpen(true);
     };
@@ -368,6 +414,10 @@ const TodoList = () => {
     const closeListEditDialog = () => {
         setIsListEditDialogOpen(false);
         setEditingList(null);
+        // Clear errors
+        setEditListErrors({
+            title: ""
+        });
     };
 
     const handleListInputChange = (e) => {
@@ -376,6 +426,13 @@ const TodoList = () => {
             ...prev,
             [name]: value
         }));
+        // Clear error when user starts typing
+        if (editListErrors[name]) {
+            setEditListErrors(prev => ({
+                ...prev,
+                [name]: ""
+            }));
+        }
     };
 
     // Dedicated input handler for the Add New List dialog
@@ -385,17 +442,34 @@ const TodoList = () => {
             ...prev,
             [name]: value
         }));
+        // Clear error when user starts typing
+        if (newListErrors[name]) {
+            setNewListErrors(prev => ({
+                ...prev,
+                [name]: ""
+            }));
+        }
     };
 
     const handleListEditSubmit = async (e) => {
         e.preventDefault();
         if (!editingList) return;
+        
+        // Clear previous errors
+        setEditListErrors({
+            title: ""
+        });
+
         try {
             const { id: listId, ...updatedData } = editingList;
             await updateList.mutateAsync({ listId, updatedData });
             closeListEditDialog();
         } catch (error) {
-            alert("Error updating list: " + error.message);
+            // Set error message as placeholder for the title field
+            setEditListErrors(prev => ({
+                ...prev,
+                title: error.message || "Error updating list"
+            }));
         }
     };
 
@@ -409,6 +483,36 @@ const TodoList = () => {
 
     return (
         <Box>
+            {/* Container for Buttons at the bottom */}
+            <HStack mb={4} spacing={4}>
+                {/* Button for adding new list */}
+                        <Button
+                            colorPalette="blue"
+                            // Consistent width for all buttons
+                            width={{base: "auto", sm: "auto", md: "auto", lg: "auto"}}
+                            minWidth={{base: "106px", lg: "130px"}}
+                            borderRadius="8px"
+                            fontSize={{base: "sm", lg: "md"}}
+                    onClick={openAddListDialog}
+                        >
+                            Add New List
+                        </Button>
+
+                {/* Button to navigate to assigned tasks */}
+                <Button
+                    colorPalette="green" // Or another color of your choice
+                    onClick={() => navigate("/dashboard/assigned-to-me")}
+                    // Consistent width for all buttons
+                    width={{base: "auto", sm: "auto", md: "auto", lg: "auto"}}
+                    minWidth={{base: "106px", lg: "130px"}}
+                    mt={{base: 2, sm: 0}} // Add some top margin on mobile if they stack
+                    borderRadius="8px"
+                    fontSize={{base: "sm", lg: "md"}}
+                >
+                    My Assigned Tasks
+                </Button>
+            </HStack>
+
             <VStack spacing={4} align="stretch">
                 {todoLists.map((todo) => (
                     <ListCard
@@ -423,73 +527,49 @@ const TodoList = () => {
                 ))}
             </VStack>
 
-            {/* Container for Buttons at the bottom */}
-            <HStack mt={4} spacing={4}> 
-                {/* Dialog for adding new list */}
+            {/* Add New List Dialog */}
+            {isAddListDialogOpen && (
                 <Dialog.Root
+                    open={isAddListDialogOpen}
+                    onOpenChange={setIsAddListDialogOpen}
                     placement="center"
                 >
-                    <Dialog.Trigger asChild>
-                        <Button
-                            colorPalette="blue"
-                            // Consistent width for all buttons
-                            width={{base: "auto", sm: "auto", md: "auto", lg: "auto"}}
-                            minWidth={{base: "106px", lg: "130px"}}
-                            borderRadius="8px"
-                            fontSize={{base: "sm", lg: "md"}}
-                        >
-                            Add New List
-                        </Button>
-                    </Dialog.Trigger>
+                    <Portal>
+                        <Dialog.Backdrop/>
+                        <Dialog.Positioner>
+                            <Dialog.Content as="form" onSubmit={handleCreateSubmit} mx={{base: 4, md: 0}}
+                                            width={{base: "90%", md: "md"}}>
+                                <Dialog.Header pt={4} px={4} pb={2}>
+                                    <Dialog.Title fontSize="lg" fontWeight="semibold">Add New List</Dialog.Title>
+                                </Dialog.Header>
+                                <Dialog.Body px={4} pb={4}>
+                                    <Field.Root name="title" required>
+                                        <Field.Label>Title</Field.Label>
+                                        <Input
+                                            name="title"
+                                            value={newList.title}
+                                            onChange={handleNewListInputChange}
+                                            placeholder={newListErrors.title || "Enter List title"}
+                                            borderColor={newListErrors.title ? "red.500" : "inherit"}
+                                            _placeholder={{ color: newListErrors.title ? "red.500" : "gray.500" }}
+                                        />
+                                    </Field.Root>
+                                </Dialog.Body>
+                                <Box display="flex" justifyContent="flex-end" px={4} pb={4} pt={2}>
+                                    <Button colorPalette="blue" mr={3} type="submit">
+                                        Save
+                                    </Button>
+                                    <Dialog.CloseTrigger asChild>
+                                        <CloseButton onClick={closeAddListDialog} />
+                                    </Dialog.CloseTrigger>
+                                </Box>
+                            </Dialog.Content>
+                        </Dialog.Positioner>
+                    </Portal>
+                </Dialog.Root>
+            )}
 
-                <Portal>
-                    <Dialog.Backdrop/>
-                    <Dialog.Positioner>
-                        <Dialog.Content as="form" onSubmit={handleCreateSubmit} mx={{base: 4, md: 0}}
-                                        width={{base: "90%", md: "md"}}>
-                            <Dialog.Header pt={4} px={4} pb={2}> {/* Adjusted padding */}
-                                <Dialog.Title fontSize="lg" fontWeight="semibold">Add New List</Dialog.Title> {/* Used Dialog.Title */}
-                            </Dialog.Header>
-                            <Dialog.Body px={4} pb={4}> {/* Adjusted padding */}
-                                <Field.Root name="title" required>
-                                    <Field.Label>Title</Field.Label>
-                                    <Input
-                                        name="title"
-                                        value={newList.title}
-                                        onChange={handleNewListInputChange}
-                                        placeholder="Enter List title"
-                                    />
-                                </Field.Root>
-                            </Dialog.Body>
-                            {/* Simplified Footer using Box */}
-                            <Box display="flex" justifyContent="flex-end" px={4} pb={4} pt={2}>
-                                <Button colorPalette="blue" mr={3} type="submit">
-                                    Save
-                                </Button>
-                                <Dialog.CloseTrigger asChild>
-                                    <CloseButton size="sm"/>
-                                </Dialog.CloseTrigger>
-                            </Box>
-                        </Dialog.Content>
-                    </Dialog.Positioner>
-                </Portal>
-            </Dialog.Root>
-
-            {/* Button to navigate to assigned tasks */}
-            <Button
-                colorPalette="green" // Or another color of your choice
-                onClick={() => navigate("/dashboard/assigned-to-me")}
-                // Consistent width for all buttons
-                width={{base: "auto", sm: "auto", md: "auto", lg: "auto"}}
-                minWidth={{base: "106px", lg: "130px"}}
-                mt={{base: 2, sm: 0}} // Add some top margin on mobile if they stack
-                borderRadius="8px"
-                fontSize={{base: "sm", lg: "md"}}
-            >
-                My Assigned Tasks
-            </Button>
-        </HStack>
-
+            {/* Edit List Dialog */}
             {editingList && (
                 <Dialog.Root open={isListEditDialogOpen} onOpenChange={setIsListEditDialogOpen} placement="center">
                     <Portal>
@@ -506,7 +586,9 @@ const TodoList = () => {
                                             name="title"
                                             value={editingList.title}
                                             onChange={handleListInputChange}
-                                            placeholder="Enter list title"
+                                            placeholder={editListErrors.title || "Enter list title"}
+                                            borderColor={editListErrors.title ? "red.500" : "inherit"}
+                                            _placeholder={{ color: editListErrors.title ? "red.500" : "gray.500" }}
                                         />
                                     </Field.Root>
                                 </Dialog.Body>
