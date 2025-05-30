@@ -287,6 +287,25 @@ const TodoDetails = message => {
         }, []) || [];
     }, [data]);
 
+    // Filter and sort users for assignee dropdown
+    const filteredAndSortedUsers = useMemo(() => {
+        if (!users) return [];
+        
+        return users
+            .filter(user => {
+                // Only include users with both id and name (first_name and last_name)
+                return user.id && 
+                       user.first_name && 
+                       user.last_name && 
+                       user.first_name.trim() !== "" && 
+                       user.last_name.trim() !== "";
+            })
+            .sort((a, b) => {
+                // Sort by id ascending
+                return a.id - b.id;
+            });
+    }, [users]);
+
     const filteredItems = filterStatus === "ALL"
         ? allTodoItems
         : allTodoItems.filter(item => item.status === filterStatus);
@@ -789,7 +808,7 @@ const TodoDetails = message => {
                                                     <option value="">
                                                         {usersLoading ? "Loading users..." : "Select assignee (optional)"}
                                                     </option>
-                                                    {users?.map((user) => (
+                                                    {filteredAndSortedUsers.map((user) => (
                                                         <option key={user.id} value={user.id}>
                                                             {user.id} - {user.first_name} {user.last_name}
                                                         </option>
@@ -884,7 +903,7 @@ const TodoDetails = message => {
                                                     <option value="">
                                                         {usersLoading ? "Loading users..." : "Select assignee (optional)"}
                                                     </option>
-                                                    {users?.map((user) => (
+                                                    {filteredAndSortedUsers.map((user) => (
                                                         <option key={user.id} value={user.id}>
                                                             {user.id} - {user.first_name} {user.last_name}
                                                         </option>
@@ -944,7 +963,7 @@ const TodoDetails = message => {
                                                     <option value="">
                                                         {usersLoading ? "Loading users..." : "Select new assignee"}
                                                     </option>
-                                                    {users?.map((user) => (
+                                                    {filteredAndSortedUsers.map((user) => (
                                                         <option key={user.id} value={user.id}>
                                                             {user.id} - {user.first_name} {user.last_name}
                                                         </option>

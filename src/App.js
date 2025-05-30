@@ -14,7 +14,8 @@ import PrivateRoute from './components/PrivateRoute';
 import PublicRoute from './components/PublicRoute';
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import { AuthProvider } from './context/AuthContext';
-import UserManagement from "./pages/UserManagement";
+import UserSetting from "./pages/UserSetting";
+import UserAdmin from "./pages/UserAdmin";
 
 const queryClient = new QueryClient();
 
@@ -36,7 +37,8 @@ function App() {
                                 <Route path="/dashboard/reviews/grid" element={<ReviewsGrid/>}/>
                                 <Route path="/dashboard/reviews/list" element={<ReviewsList/>}/>
                                 <Route path="/users" element={<Users/>}/>
-                                <Route path="/user-management" element={<UserManagement/>}/>
+                                <Route path="/user-management" element={<UserAdmin/>}/>
+                                <Route path="/dashboard/settings" element={<UserSetting/>}/>
                                 <Route path="/dashboard/todolist" element={<TodoList/>}/>
                                 <Route path="/dashboard/todolist/:id" element={<TodoDetails/>}/>
                                 <Route path="/dashboard/assigned-to-me" element={<AssignedTasksPage />} />

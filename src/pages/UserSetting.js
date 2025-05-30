@@ -11,7 +11,7 @@ import {
     Spinner,
 } from "@chakra-ui/react";
 
-export default function UserManagement() {
+export default function UserSetting() {
     const {data: user, isLoading, error} = useCurrentUser();
     const updateUser = useUpdateCurrentUser();
 

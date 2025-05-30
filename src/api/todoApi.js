@@ -437,3 +437,147 @@ export const useUpdateCurrentUser = () => {
         },
     });
 };
+
+// --- ADMIN USER CRUD HOOKS ---
+
+// List all users (admin only)
+export const useAdminUsers = () => {
+    return useQuery({
+        queryKey: ['adminUsers'],
+        queryFn: async () => {
+            const token = await getAuthToken();
+            const response = await fetch(`${API_BASE_URL}user/`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (!response.ok) {
+                let errorMessage = 'Network response was not ok when listing users';
+                try {
+                    const errorData = await response.json();
+                    errorMessage = errorData.detail || errorData.error || errorMessage;
+                } catch (e) {}
+                throw new Error(errorMessage);
+            }
+            const data = await response.json();
+            return data && data.results ? data.results : data;
+        },
+    });
+};
+
+// Get user by ID (admin or self)
+export const useAdminUser = (userId) => {
+    return useQuery({
+        queryKey: ['adminUser', userId],
+        queryFn: async () => {
+            const token = await getAuthToken();
+            const response = await fetch(`${API_BASE_URL}user/${userId}/`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (!response.ok) {
+                let errorMessage = 'Network response was not ok when getting user';
+                try {
+                    const errorData = await response.json();
+                    errorMessage = errorData.detail || errorData.error || errorMessage;
+                } catch (e) {}
+                throw new Error(errorMessage);
+            }
+            return response.json();
+        },
+        enabled: !!userId,
+    });
+};
+
+// Create/register a new user (admin)
+export const useCreateUser = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async (newUser) => {
+            const token = await getAuthToken();
+            const response = await fetch(`${API_BASE_URL}user/register/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(newUser),
+            });
+            if (!response.ok) {
+                let errorMessage = 'Network response was not ok when registering user';
+                try {
+                    const errorData = await response.json();
+                    errorMessage = errorData.detail || errorData.error || errorMessage;
+                } catch (e) {}
+                throw new Error(errorMessage);
+            }
+            return response.json();
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['adminUsers'] });
+        },
+    });
+};
+
+// Update user (admin or self)
+export const useUpdateUser = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async ({ userId, updatedData }) => {
+            const token = await getAuthToken();
+            const response = await fetch(`${API_BASE_URL}user/${userId}/`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(updatedData),
+            });
+            if (!response.ok) {
+                let errorMessage = 'Network response was not ok when updating user';
+                try {
+                    const errorData = await response.json();
+                    errorMessage = errorData.detail || errorData.error || errorMessage;
+                } catch (e) {}
+                throw new Error(errorMessage);
+            }
+            return response.json();
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['adminUsers'] });
+        },
+    });
+};
+
+// Delete user (admin or self)
+export const useDeleteUser = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async (userId) => {
+            const token = await getAuthToken();
+            const response = await fetch(`${API_BASE_URL}user/${userId}/`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (!response.ok) {
+                let errorMessage = 'Network response was not ok when deleting user';
+                try {
+                    const errorData = await response.json();
+                    errorMessage = errorData.detail || errorData.error || errorMessage;
+                } catch (e) {}
+                throw new Error(errorMessage);
+            }
+            if (response.status === 204) {
+                return null;
+            }
+            const text = await response.text();
+            return text ? JSON.parse(text) : null;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['adminUsers'] });
+        },
+    });
+};
