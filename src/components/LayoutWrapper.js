@@ -1,40 +1,17 @@
 import Logoutbutton from "../components/LogoutButton";
-import {Avatar, Box, Button, Flex, Grid, GridItem, HStack, Image, Input, Spacer, VStack} from "@chakra-ui/react";
-import { Text } from "@chakra-ui/react";
-import { ReactComponent as HomeIconSvg } from "../icon/home-2.svg";
-import { ReactComponent as Quote} from "../icon/quote-down-square.svg"
-import { ReactComponent as Command_square} from "../icon/command-square.svg"
-import { ReactComponent as Hashtag} from "../icon/hashtag.svg"
-import { ReactComponent as Notification_bing} from "../icon/notification-bing.svg"
-import { ReactComponent as Setting} from "../icon/setting.svg"
-import { ReactComponent as User} from "../icon/filled_user.svg"
-import { ReactComponent as Linear_user} from "../icon/user.svg"
-import { ReactComponent as Goods_scraped} from "../image/Frame 35563.svg"
-import { ReactComponent as Profile_example } from "../image/Group 35556.svg"
-import { ReactComponent as Chart_square } from "../icon/chart-square.svg"
-import { ReactComponent as Number_of_Takedowns } from "../image/Frame 35384.svg"
-import { ReactComponent as Coin } from "../icon/coin.svg"
-import { ReactComponent as Message_notif } from "../icon/message-notif.svg"
-import { ReactComponent as Notices_num } from "../image/2395.svg"
-import profileImage from "../image/Group 35556.svg";
-import { ReactComponent as Logout_icon } from "../icon/logout.svg";
-import { useNavigate, useLocation } from 'react-router-dom';
-import {InputGroup, InputElement, SimpleGrid} from "@chakra-ui/react";
-import { Icon, createIcon } from "@chakra-ui/react";
-import Card from "../components/Card";
-import {
-    Area,
-    AreaChart,
-    Bar,
-    BarChart,
-    CartesianGrid,
-    Legend,
-    ResponsiveContainer,
-    Tooltip,
-    XAxis,
-    YAxis
-} from "recharts";
+import {Box, createIcon, Flex, Grid, GridItem, Icon, Image, Input, InputGroup, Text} from "@chakra-ui/react";
+import {ReactComponent as HomeIconSvg} from "../icon/home-2.svg";
+import {ReactComponent as Quote} from "../icon/quote-down-square.svg"
+import {ReactComponent as Command_square} from "../icon/command-square.svg"
+import {ReactComponent as Hashtag} from "../icon/hashtag.svg"
+import {ReactComponent as Notification_bing} from "../icon/notification-bing.svg"
+import {ReactComponent as Setting} from "../icon/setting.svg"
+import {ReactComponent as User} from "../icon/filled_user.svg"
+import profileImage from "../image/Group 35556.svg"
+import {ReactComponent as Logout_icon} from "../icon/logout.svg";
+import {useLocation, useNavigate} from 'react-router-dom';
 import {useState} from "react";
+import {Haptics, ImpactStyle} from "@capacitor/haptics";
 
 const SearchIcon = createIcon({
     displayName: "SearchIcon",
@@ -65,11 +42,19 @@ const SearchIcon = createIcon({
     ),
 });
 
-const MenuItem = ({ icon, text, isActive, to, notifications }) => {
+const MenuItem = ({icon, text, isActive, to, notifications}) => {
     const navigate = useNavigate();
 
-    const handleClick = () => {
-        if(to) {
+    const handleClick = async () => {
+        try {
+            // Add haptic feedback on the menu item press
+            await Haptics.impact({ style: ImpactStyle.Light });
+        } catch (error) {
+            // Haptics might not be available on web/desktop
+            console.log('Haptics not available:', error);
+        }
+
+        if (to) {
             navigate(to);
         }
     }
@@ -84,7 +69,7 @@ const MenuItem = ({ icon, text, isActive, to, notifications }) => {
             alignItems="center"
             padding="0 16px"
             gap="12px"
-            _hover={{ bg: isActive ? "#6F6FC3" : "gray.100" }}
+            _hover={{bg: isActive ? "#6F6FC3" : "gray.100"}}
             cursor="pointer"
             onClick={handleClick}
             role={to ? "link" : "button"}
@@ -109,7 +94,8 @@ const MenuItem = ({ icon, text, isActive, to, notifications }) => {
             </GridItem>
             {notifications !== 0 && (
                 <GridItem>
-                    <Box width="16px" height="16px" bg="red" borderRadius="50%" display="flex" justifyContent="center" alignItems="center">
+                    <Box width="16px" height="16px" bg="red" borderRadius="50%" display="flex" justifyContent="center"
+                         alignItems="center">
                         <Text color="white" fontSize="12px"> {notifications} </Text>
                     </Box>
                 </GridItem>
@@ -273,7 +259,7 @@ const MobileNav = () => {
                 justify="space-between"
                 align="center"
                 p={4}
-                display={{ base: "flex", md: "none" }}
+                display={{base: "flex", md: "none"}}
                 bg="white"
                 position="relative"
                 zIndex="dropdown"
@@ -322,7 +308,7 @@ const MobileNav = () => {
                         boxShadow="xl"
                         animation="slideIn 0.3s ease-out"
                     >
-                        <SideBox />
+                        <SideBox/>
                     </Box>
                 </Box>
             )}
@@ -330,25 +316,25 @@ const MobileNav = () => {
     );
 };
 
-const PageHeader = ({ title }) => {
+const PageHeader = ({title}) => {
     return (
         <Flex
             justify="space-between"
             align="center"
-            flexDirection={{ base: "column", lg: "row" }}
-            gap={{ base: 4, lg: 0 }}
+            flexDirection={{base: "column", lg: "row"}}
+            gap={{base: 4, lg: 0}}
         >
             <Text fontSize="2xl" fontWeight="bold" color="black">{title}</Text>
 
             <Flex
                 align="center"
-                width={{ base: "100%", lg: "auto" }}
-                flexDirection={{ base: "column", md: "row" }}
+                width={{base: "100%", lg: "auto"}}
+                flexDirection={{base: "column", md: "row"}}
                 gap={4}
-                justify={{ base: "flex-start", md: "flex-end" }}
+                justify={{base: "flex-start", md: "flex-end"}}
                 ml="auto"
             >
-                <InputGroup w={{ base: "100%", md: "250px", lg: "400px" }}>
+                <InputGroup w={{base: "100%", md: "250px", lg: "400px"}}>
                     <Box position="relative" width="100%">
                         <Input
                             placeholder="Search"
@@ -374,7 +360,7 @@ const PageHeader = ({ title }) => {
                         </Box>
                     </Box>
                 </InputGroup>
-                <Box display={{ base: "none", md: "block" }}>
+                <Box display={{base: "none", md: "block"}}>
                     <Image src={profileImage}/>
                 </Box>
             </Flex>
@@ -382,7 +368,7 @@ const PageHeader = ({ title }) => {
     );
 };
 
-const LayoutWrapper = ({ children, pageTitle = "Dashboard" }) => {
+const LayoutWrapper = ({children, pageTitle = "Dashboard"}) => {
     const location = useLocation();
     let dynamicTitle = pageTitle;
 
@@ -415,13 +401,13 @@ const LayoutWrapper = ({ children, pageTitle = "Dashboard" }) => {
             bg="#f8f4fc"
             overflow="auto" // Changed from hidden to auto
         >
-            <GridItem display={{ base: "none", md: "block" }}>
-                <SideBox />
+            <GridItem display={{base: "none", md: "block"}}>
+                <SideBox/>
             </GridItem>
 
             <GridItem overflow="auto">
                 <Box
-                    padding={{ base: 4, md: 6 }}
+                    padding={{base: 4, md: 6}}
                     width="100%"
                     height="100%" // Changed from 100vh to 100%
                     overflow="auto" // Always auto instead of hidden with hover
@@ -440,15 +426,15 @@ const LayoutWrapper = ({ children, pageTitle = "Dashboard" }) => {
                         scrollbarColor: '#CBD5E0 transparent',
                     }}
                 >
-                    <MobileNav />
+                    <MobileNav/>
 
                     <Grid
                         templateRows="auto 1fr"
-                        gap={{ base: "12px", md: "20px" }}
+                        gap={{base: "12px", md: "20px"}}
                         height="auto" // Changed from 100% to auto
                     >
                         <GridItem>
-                            <PageHeader title={dynamicTitle} />
+                            <PageHeader title={dynamicTitle}/>
                         </GridItem>
 
                         <GridItem>
