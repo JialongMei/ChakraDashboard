@@ -58,6 +58,7 @@
     ]
   },
   "devDependencies": {
-    "@capacitor/assets": "^3.0.5"
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/docgen": "^0.3.0"
   }
 }

@@ -1,9 +1,20 @@
 import type { CapacitorConfig } from '@capacitor/cli';
+import { CapacitorHttp, HttpResponse } from '@capacitor/core';
 
 const config: CapacitorConfig = {
   appId: 'com.example.app',
   appName: 'Chakra Dashboard',
   webDir: 'build',
+
+
+  server: {
+    androidScheme: 'http',
+    cleartext: true,
+  },
+  android: {
+    allowMixedContent: true
+  },
+
 
   plugins: {
     SplashScreen: {
@@ -21,6 +32,9 @@ const config: CapacitorConfig = {
       splashImmersive: true,
       layoutName: "launch_screen",
       useDialog: true,
+    },
+    CapacitorHttp: {
+      enabled: true
     },
   },
 };

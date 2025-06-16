@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from '@tansta
 import { auth } from '../firebase';
 
 // Base URL for your API
-const API_BASE_URL = 'http://127.0.0.1:8000/api/';
+export const API_BASE_URL = 'http://192.168.178.154:8000/api/';
 
 // API endpoints
 const ENDPOINTS = {
@@ -44,6 +44,7 @@ const getAuthToken = async () => {
 
 // Fetch all todo lists
 export const useTodoLists = () => {
+    console.log('Fetching:', `${API_BASE_URL}${ENDPOINTS.todoLists}`);
     return useQuery({
         queryKey: ['todoLists'],
         queryFn: async () => {
@@ -580,4 +581,50 @@ export const useDeleteUser = () => {
             queryClient.invalidateQueries({ queryKey: ['adminUsers'] });
         },
     });
+};
+
+// Simple test to check if the app has internet connection
+export const testInternetConnection = async () => {
+    try {
+        const response = await fetch('https://www.google.com', { method: 'GET' });
+        return response.ok;
+    } catch (error) {
+        return false;
+    }
+};
+
+// Test if backend base URL returns a status code (returns status or null on error)
+export const testBackendBaseUrl = async () => {
+    try {
+        const resp = await fetch(API_BASE_URL, { method: 'GET' });
+        return resp.status;
+    } catch (e) {
+        return null;
+    }
+};
+
+// Test both Google, a CORS-friendly public API, and backend 404
+export const testMultipleInternetConnections = async () => {
+    let google = false;
+    let corsApi = false;
+    let backendStatus = null;
+    try {
+        const googleResp = await fetch('https://www.google.com', { method: 'GET' });
+        google = googleResp.ok;
+    } catch (e) {
+        google = false;
+    }
+    try {
+        const corsResp = await fetch('https://jsonplaceholder.typicode.com/posts/1', { method: 'GET' });
+        corsApi = corsResp.ok;
+    } catch (e) {
+        corsApi = false;
+    }
+    try {
+        const backendResp = await fetch(API_BASE_URL, { method: 'GET' });
+        backendStatus = backendResp.status;
+    } catch (e) {
+        backendStatus = null;
+    }
+    return { google, corsApi, backendStatus };
 };

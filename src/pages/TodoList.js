@@ -19,6 +19,7 @@ import { initialTodoListsData } from "../data/todoData.js";
 import { useTodoLists, useCreateTodoList, useUpdateTodoList, useDeleteTodoList } from '../api/todoApi';
 import {useAuth} from "../context/AuthContext";
 import { Dialog, Field, Input as ChakraInput, Textarea, Portal, CloseButton } from "@chakra-ui/react";
+import { API_BASE_URL, testInternetConnection, testMultipleInternetConnections } from '../api/todoApi';
 
 const index = 3;
 
@@ -46,6 +47,11 @@ const EditIcon = createIcon({
         />
     ),
 });
+
+const ENDPOINTS = {
+    todoLists: 'todo_list/',
+    // ... other endpoints ...
+};
 
 const ListCard = ({title, owner, items, id, onEdit, onDelete, ...props}) => {
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -302,7 +308,6 @@ const ListCard = ({title, owner, items, id, onEdit, onDelete, ...props}) => {
 };
 
 const TodoList = () => {
-    const [todoLists, setTodoLists] = useState(initialTodoListsData);
     const { user, loading } = useAuth();
     const navigate = useNavigate();
 
@@ -325,8 +330,6 @@ const TodoList = () => {
     
     const [newList, setNewList] = useState({
         title: "",
-        // Add description if your "Add New List" dialog will also have a description field
-        // description: "", 
     });
 
     // Error states for form fields
@@ -337,42 +340,28 @@ const TodoList = () => {
         title: ""
     });
 
+    const [internetStatus, setInternetStatus] = useState({ google: null, corsApi: null, backendStatus: null });
+
     const hanldeCreateList = async(listData) => {
         try {
             await createList.mutateAsync(listData);
             closeAddListDialog(); // Use the new close function
         } catch (error) {
-            // Set error message as placeholder for the title field
             setNewListErrors(prev => ({
                 ...prev,
                 title: error.message || "Error creating list"
             }));
-            throw error; // Re-throw to prevent dialog from closing
+            throw error;
         }
     }
 
     const handleCreateSubmit = async (e) => {
         e.preventDefault();
-        
-        // Clear previous errors
-        setNewListErrors({
-            title: ""
-        });
-
+        setNewListErrors({ title: "" });
         try {
-        await hanldeCreateList({
-            ...newList,
-        });
-        } catch (error) {
-            // Error is already handled in hanldeCreateList
-        }
+            await hanldeCreateList({ ...newList });
+        } catch (error) {}
     };
-
-    useEffect(() => {
-        if (lists) {
-            setTodoLists(lists);
-        }
-    }, [lists]);
 
     // Open/Close functions for Add New List Dialog
     const openAddListDialog = () => {
@@ -473,10 +462,38 @@ const TodoList = () => {
         }
     };
 
+    useEffect(() => {
+        if (listsError) {
+            testMultipleInternetConnections().then(result => setInternetStatus(result));
+        }
+    }, [listsError]);
+
     if (loading || listsLoading) {
         return (
             <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
                 <Spinner size="xl" />
+            </Box>
+        );
+    }
+
+    if (listsError) {
+        return (
+            <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" height="100vh">
+                <Text color="red.500" fontSize="xl" mb={4}>
+                    Failed to fetch todo lists.<br />
+                    <span style={{ fontSize: '0.9em', color: '#555' }}>
+                        Tried URL: {API_BASE_URL + ENDPOINTS.todoLists}
+                    </span>
+                </Text>
+                <Text color="gray.600" fontSize="md">
+                    Access to Google: {internetStatus.google === null ? 'Checking...' : internetStatus.google ? 'Yes' : 'No'}<br />
+                    Access to CORS API: {internetStatus.corsApi === null ? 'Checking...' : internetStatus.corsApi ? 'Yes' : 'No'}<br />
+                    {internetStatus.backendStatus === null
+                        ? 'Backend base URL: Checking...'
+                        : internetStatus.backendStatus === 404
+                            ? 'Backend base URL returns 404: Yes'
+                            : `Backend base URL status: ${internetStatus.backendStatus}`}
+                </Text>
             </Box>
         );
     }
@@ -486,35 +503,31 @@ const TodoList = () => {
             {/* Container for Buttons at the bottom */}
             <HStack mb={4} spacing={4}>
                 {/* Button for adding new list */}
-                        <Button
-                            colorPalette="blue"
-                            // Consistent width for all buttons
-                            width={{base: "auto", sm: "auto", md: "auto", lg: "auto"}}
-                            minWidth={{base: "106px", lg: "130px"}}
-                            borderRadius="8px"
-                            fontSize={{base: "sm", lg: "md"}}
-                    onClick={openAddListDialog}
-                        >
-                            Add New List
-                        </Button>
-
-                {/* Button to navigate to assigned tasks */}
                 <Button
-                    colorPalette="green" // Or another color of your choice
-                    onClick={() => navigate("/dashboard/assigned-to-me")}
-                    // Consistent width for all buttons
+                    colorPalette="blue"
                     width={{base: "auto", sm: "auto", md: "auto", lg: "auto"}}
                     minWidth={{base: "106px", lg: "130px"}}
-                    mt={{base: 2, sm: 0}} // Add some top margin on mobile if they stack
+                    borderRadius="8px"
+                    fontSize={{base: "sm", lg: "md"}}
+                    onClick={openAddListDialog}
+                >
+                    Add New List
+                </Button>
+                {/* Button to navigate to assigned tasks */}
+                <Button
+                    colorPalette="green"
+                    onClick={() => navigate("/dashboard/assigned-to-me")}
+                    width={{base: "auto", sm: "auto", md: "auto", lg: "auto"}}
+                    minWidth={{base: "106px", lg: "130px"}}
+                    mt={{base: 2, sm: 0}}
                     borderRadius="8px"
                     fontSize={{base: "sm", lg: "md"}}
                 >
                     My Assigned Tasks
                 </Button>
             </HStack>
-
             <VStack spacing={4} align="stretch">
-                {todoLists.map((todo) => (
+                {lists && lists.map((todo) => (
                     <ListCard
                         key={todo.id}
                         id={todo.id}
@@ -526,7 +539,6 @@ const TodoList = () => {
                     />
                 ))}
             </VStack>
-
             {/* Add New List Dialog */}
             {isAddListDialogOpen && (
                 <Dialog.Root
