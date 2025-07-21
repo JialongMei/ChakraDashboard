@@ -13,6 +13,8 @@ dependencies {
     implementation project(':capacitor-haptics')
     implementation project(':capacitor-splash-screen')
     implementation project(':capacitor-plugin-safe-area')
+    implementation project(':simple-test-plugin')
+    implementation project(':dashboard-plugin')
 
 }
 

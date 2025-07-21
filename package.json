@@ -30,8 +30,10 @@
     "react-router-dom": "^7.5.1",
     "react-scripts": "5.0.1",
     "recharts": "^2.15.3",
+    "simple-test-plugin": "file:simple-test-plugin",
     "web-vitals": "^2.1.4",
-    "yarn": "^1.22.22"
+    "yarn": "^1.22.22",
+    "dashboard-plugin": "file:dashboard-plugin"
   },
   "scripts": {
     "start": "react-scripts start",

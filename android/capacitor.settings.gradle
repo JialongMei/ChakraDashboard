@@ -13,3 +13,9 @@ project(':capacitor-splash-screen').projectDir = new File('../node_modules/@capa
 
 include ':capacitor-plugin-safe-area'
 project(':capacitor-plugin-safe-area').projectDir = new File('../node_modules/capacitor-plugin-safe-area/android')
+
+include ':simple-test-plugin'
+project(':simple-test-plugin').projectDir = new File('../simple-test-plugin/android')
+
+include ':dashboard-plugin'
+project(':dashboard-plugin').projectDir = new File('../dashboard-plugin/android')

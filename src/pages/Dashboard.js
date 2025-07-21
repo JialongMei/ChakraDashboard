@@ -1,5 +1,7 @@
 import LayoutWrapper from "../components/LayoutWrapper";
 import Logoutbutton from "../components/LogoutButton";
+import ShakeIndicator from "../components/ShakeIndicator";
+import useShakeLogout from "../hooks/useShakeLogout";
 import {Avatar, Box, Button, Flex, Grid, GridItem, HStack, Image, Input, Spacer, VStack} from "@chakra-ui/react";
 import { Text } from "@chakra-ui/react";
 import { ReactComponent as HomeIconSvg } from "../icon/home-2.svg";
@@ -1127,7 +1129,25 @@ const MainContent = () => {
 }
 
 export default function Dashboard() {
+    const { 
+        isShakeDetectionActive, 
+        shakeCount, 
+        pluginStatus, 
+        pluginError, 
+        testShakeDetection 
+    } = useShakeLogout(true);
+    
     return (
-        <MainContent/>
+        <>
+            <MainContent/>
+            <ShakeIndicator 
+                showDetails={true} 
+                isShakeDetectionActive={isShakeDetectionActive}
+                shakeCount={shakeCount}
+                pluginStatus={pluginStatus}
+                pluginError={pluginError}
+                testShakeDetection={testShakeDetection}
+            />
+        </>
     )
 }
